@@ -6,6 +6,7 @@ import ruRU from 'antd/lib/locale/ru_RU';
 import App from './App.tsx';
 import reportWebVitals from './reportWebVitals';
 import ReactDOM from 'react-dom';
+import { ProvideLayoutConfig } from './shared/hooks/useLayoutConfig/useLayoutConfig';
 
 import './theme.less';
 import './index.less';
@@ -13,9 +14,11 @@ import './index.less';
 const rootComponent = (
   <React.StrictMode>
     <BrowserRouter>
-      <ConfigProvider locale={ruRU}>
-        <App />
-      </ConfigProvider>
+      <ProvideLayoutConfig>
+        <ConfigProvider locale={ruRU}>
+          <App />
+        </ConfigProvider>
+      </ProvideLayoutConfig>
     </BrowserRouter>
   </React.StrictMode>
 );

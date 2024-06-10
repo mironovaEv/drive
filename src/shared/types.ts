@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, ReactElement } from 'react';
 
 export interface IRoute {

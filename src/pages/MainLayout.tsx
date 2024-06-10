@@ -11,6 +11,8 @@ import block from 'bem-cn';
 import { SiderIcon } from '../shared/img/SiderIcon';
 import './MainLayout.scss';
 import { Logo } from '../shared/img/Logo';
+import MainMenu from '../features/MainMenu/MainMenu';
+import { rootRoutes } from '../Routes';
 
 const b = block('app');
 const l = block('logo');
@@ -42,7 +44,7 @@ const MainLayout: React.FC = () => {
             ) : null}
           </div>
           {/* <UserBlock collapsed={collapsed} /> */}
-          {/* <MainMenu routes={rootRoutes} /> */}
+          <MainMenu routes={rootRoutes} />
         </div>
         <div className={b('container-information').toString()}>
           <div className={l({ collapsed }).toString()}>
