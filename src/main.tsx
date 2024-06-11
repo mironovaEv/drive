@@ -10,16 +10,20 @@ import { ProvideLayoutConfig } from './shared/hooks/useLayoutConfig/useLayoutCon
 
 import './theme.less';
 import './index.less';
+import { Provider } from 'react-redux';
+import { store } from './redux/store.ts';
 
 const rootComponent = (
   <React.StrictMode>
-    <BrowserRouter>
-      <ProvideLayoutConfig>
-        <ConfigProvider locale={ruRU}>
-          <App />
-        </ConfigProvider>
-      </ProvideLayoutConfig>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ProvideLayoutConfig>
+          <ConfigProvider locale={ruRU}>
+            <App />
+          </ConfigProvider>
+        </ProvideLayoutConfig>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
