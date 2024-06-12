@@ -1,0 +1,23 @@
+@use '/src/shared/scss/color';
+
+.file-card {
+    border: 1px solid color.$primary;
+    width: 130px;
+    
+    
+    
+
+}
+
+.file-card-icon {
+    padding: 5px;
+    padding-bottom: 0;
+    width: 100px;
+    margin: auto;
+    
+    
+
+}
+.ant-card-body{
+    padding: 10px;
+}
