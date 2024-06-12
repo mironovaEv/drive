@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   return (
     <Layout>
       <div className={b().toString()}>
-        <Button onClick={handleSignIn}>Войти с помощью GoogleDrive</Button>
+        <Button onClick={handleSignIn}>Войти с помощью Google</Button>
       </div>
     </Layout>
   );

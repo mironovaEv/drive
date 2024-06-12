@@ -5,14 +5,12 @@ import { Button, Layout, Typography } from 'antd';
 import Icon from '@ant-design/icons';
 import block from 'bem-cn';
 
-// import MainMenu from '../features/MainMenu/MainMenu';
-// import { rootRoutes } from '../Routes';
-// import UserBlock from '../features/UserBlock/UserBlock';
 import { SiderIcon } from '../shared/img/SiderIcon';
 import './MainLayout.scss';
 import { Logo } from '../shared/img/Logo';
 import MainMenu from '../features/MainMenu/MainMenu';
 import { rootRoutes } from '../Routes';
+import UserBlock from '../features/UserBlock/UserBlock';
 
 const b = block('app');
 const l = block('logo');
@@ -43,7 +41,7 @@ const MainLayout: React.FC = () => {
               </Title>
             ) : null}
           </div>
-          {/* <UserBlock collapsed={collapsed} /> */}
+          <UserBlock collapsed={collapsed} />
           <MainMenu routes={rootRoutes} />
         </div>
         <div className={b('container-information').toString()}>

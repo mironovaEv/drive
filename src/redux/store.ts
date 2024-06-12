@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { userBlockApi } from '../features/UserBlock/api/userBlockApi';
 
-import { authApi } from '../pages/Login/authApi';
-
-const mw = [authApi.middleware];
+const mw = [userBlockApi.middleware];
 export const store = configureStore({
   reducer: {
-    [authApi.reducerPath]: authApi.reducer,
+    [userBlockApi.reducerPath]: userBlockApi.reducer,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }).concat(mw),
 });

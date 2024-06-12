@@ -43,7 +43,7 @@ const createRoutes = (isAuth: boolean) => [
 const App: React.FC = () => {
   useEventBus();
 
-  const isAuth = false;
+  const isAuth = true;
   const customRouter = useRoutes(createRoutes(isAuth));
 
   return <Suspense fallback={<Spin />}>{customRouter}</Suspense>;
