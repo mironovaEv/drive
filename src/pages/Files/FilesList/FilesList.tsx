@@ -5,6 +5,7 @@ import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
 import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
+import { FolderOutlined, CloudUploadOutlined } from '@ant-design/icons';
 
 const b = block('files-list');
 
@@ -19,8 +20,12 @@ const FilesList: React.FC = () => {
       <MainHeader>
         <div className={b('main-buttons')}>
           <div className={b('main-buttons-container').toString()}>
-            <Button type="primary">Создать папку</Button>
-            <Button type="primary">Загрузить</Button>
+            <Button className={b('main-button').toString()} type="primary" icon={<FolderOutlined style={{ fontSize: 17 }} />}>
+              <p style={{ margin: 'auto' }}>Создать папку</p>
+            </Button>
+            <Button className={b('main-button').toString()} type="primary" icon={<CloudUploadOutlined style={{ fontSize: 18 }} />}>
+              <p style={{ margin: 'auto' }}>Загрузить</p>
+            </Button>
           </div>
         </div>
       </MainHeader>
