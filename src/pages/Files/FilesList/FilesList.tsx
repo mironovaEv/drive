@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Layout, Upload } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
@@ -27,7 +28,6 @@ const FilesList: React.FC = () => {
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
 
   const folderId = useGetFolderId();
-  console.log(folderId);
 
   const handleAddFolder = useCallback(() => {
     setFormCreateRecordMode(FormMode.Create);
@@ -39,11 +39,11 @@ const FilesList: React.FC = () => {
     async (values: IFolder) => {
       const result = await create({
         folderName: values.folderName,
-        targetFolderId: folderId,
+        targetFolderId: folderId!,
       });
       return result;
     },
-    [create]
+    [create, folderId]
   );
 
   useEffect(() => {

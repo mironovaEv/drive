@@ -16,7 +16,7 @@ export const FilesRoutes: IRoute[] = [
     title: '',
   },
   {
-    path: ':id',
+    path: ':folderId',
     element: (
       <Suspense fallback={<Spin className="main-loader" />}>
         <FilesList />
