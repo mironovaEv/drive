@@ -54,12 +54,12 @@ const FilesList: React.FC = () => {
       <MainHeader>
         <div className={b('main-buttons')}>
           <div className={b('main-buttons-container').toString()}>
-            <Button onClick={handleAddFolder} className={b('main-button').toString()} type="primary" icon={<FolderOutlined style={{ fontSize: 17 }} />}>
-              <p style={{ margin: 'auto' }}>Создать папку</p>
+            <Button onClick={handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 17 }} />}>
+              <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
-            <Upload className={b('main-button').toString()}>
-              <Button className={b('main-button').toString()} type="primary" icon={<CloudUploadOutlined style={{ fontSize: 18 }} />}>
-                <p style={{ margin: 'auto' }}>Загрузить</p>
+            <Upload className={b('main-button-upload').toString()}>
+              <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 18 }} />}>
+                <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
             </Upload>
           </div>
