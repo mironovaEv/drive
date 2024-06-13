@@ -7,12 +7,14 @@ import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
 import { FolderOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
+import { useGetFilesQuery } from '../api/filesApi';
 
 const b = block('files-list');
 const { Content } = Layout;
 
 const FilesList: React.FC = () => {
   const { setConfig } = useLayoutConfig();
+  const { data: dataFiles } = useGetFilesQuery(undefined);
 
   useEffect(() => {
     setConfig({ activeMenuKey: Paths.Files, headerTitle: 'Мои файлы' });
@@ -35,11 +37,9 @@ const FilesList: React.FC = () => {
       </MainHeader>
       <Content>
         <div className={b('files-container').toString()}>
-          <FileComponent type={'folder'} />
-          <FileComponent type={'img'} />
-          <FileComponent type={'audio'} />
-          <FileComponent type={'video'} />
-          <FileComponent type={''} />
+          {dataFiles?.map(file => (
+            <FileComponent key={file.id} trashed={file.trashed} type={file.mimeType} name={file.name} fileSize={file.size} />
+          ))}
         </div>
       </Content>
     </div>
