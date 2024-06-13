@@ -15,3 +15,13 @@ export interface IFile {
   size: number;
   parents: string[];
 }
+
+export interface IFolder {
+  folderName: string;
+  targetFolderId: string;
+}
+export interface IRootDir {
+  id: string;
+  name: string;
+  mimeType: string;
+}

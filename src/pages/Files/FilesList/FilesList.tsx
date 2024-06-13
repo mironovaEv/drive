@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Layout, Upload } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
 import { Paths } from '../../../shared/constants';
@@ -7,7 +7,11 @@ import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
 import { FolderOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
-import { useGetFilesQuery } from '../api/filesApi';
+import { useCreateFolderMutation, useGetFilesQuery } from '../api/filesApi';
+import { FormMode } from '../types';
+import { IFolder } from '../api/types';
+import CreateRecordModal from '../components/createFolderModal/createFolder';
+import { useGetFolderId } from '../../../shared/hooks/useGetFolderId/useGetFolderId';
 
 const b = block('files-list');
 const { Content } = Layout;
@@ -15,6 +19,32 @@ const { Content } = Layout;
 const FilesList: React.FC = () => {
   const { setConfig } = useLayoutConfig();
   const { data: dataFiles } = useGetFilesQuery(undefined);
+
+  const [showCreateRecordModal, setShowCreateRecordModal] = useState(false);
+  const [formCreateRecordMode, setFormCreateRecordMode] = useState<FormMode>(FormMode.Create);
+  const [initialValues, setInitialValues] = useState<IFolder | object>({});
+
+  const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
+
+  const folderId = useGetFolderId();
+  console.log(folderId);
+
+  const handleAddFolder = useCallback(() => {
+    setFormCreateRecordMode(FormMode.Create);
+    setInitialValues({});
+    setShowCreateRecordModal(true);
+  }, []);
+
+  const onCreateFolder = useCallback(
+    async (values: IFolder) => {
+      const result = await create({
+        folderName: values.folderName,
+        targetFolderId: folderId,
+      });
+      return result;
+    },
+    [create]
+  );
 
   useEffect(() => {
     setConfig({ activeMenuKey: Paths.Files, headerTitle: 'Мои файлы' });
@@ -24,7 +54,7 @@ const FilesList: React.FC = () => {
       <MainHeader>
         <div className={b('main-buttons')}>
           <div className={b('main-buttons-container').toString()}>
-            <Button className={b('main-button').toString()} type="primary" icon={<FolderOutlined style={{ fontSize: 17 }} />}>
+            <Button onClick={handleAddFolder} className={b('main-button').toString()} type="primary" icon={<FolderOutlined style={{ fontSize: 17 }} />}>
               <p style={{ margin: 'auto' }}>Создать папку</p>
             </Button>
             <Upload className={b('main-button').toString()}>
@@ -38,10 +68,25 @@ const FilesList: React.FC = () => {
       <Content>
         <div className={b('files-container').toString()}>
           {dataFiles?.map(file => (
-            <FileComponent key={file.id} trashed={file.trashed} type={file.mimeType} name={file.name} fileSize={file.size} />
+            <FileComponent
+              id={file.id}
+              visible={file.parents[0] === folderId}
+              key={file.id}
+              trashed={file.trashed}
+              type={file.mimeType}
+              name={file.name}
+              fileSize={file.size}
+            />
           ))}
         </div>
       </Content>
+      <CreateRecordModal
+        formMode={formCreateRecordMode}
+        initialValues={initialValues as IFolder}
+        isLoading={isLoadingCreate}
+        modal={{ visible: showCreateRecordModal, setVisible: setShowCreateRecordModal }}
+        onSave={onCreateFolder}
+      />
     </div>
   );
 };

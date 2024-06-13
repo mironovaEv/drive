@@ -15,4 +15,13 @@ export const FilesRoutes: IRoute[] = [
     ),
     title: '',
   },
+  {
+    path: ':id',
+    element: (
+      <Suspense fallback={<Spin className="main-loader" />}>
+        <FilesList />
+      </Suspense>
+    ),
+    title: '',
+  },
 ];

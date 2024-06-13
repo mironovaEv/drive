@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { IFile } from './types';
+import { IFile, IFolder, IRootDir } from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
@@ -16,7 +16,23 @@ export const filesApi = createApi({
       }),
       providesTags: ['Files'],
     }),
+    createFolder: builder.mutation<undefined, IFolder>({
+      query: data => ({
+        url: '/files/create/folder',
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files'],
+    }),
+    getRootDir: builder.query<IRootDir, unknown>({
+      query: params => ({
+        url: '/files/get/root',
+        method: 'get',
+        params,
+      }),
+      providesTags: ['Files'],
+    }),
   }),
 });
 
-export const { useGetFilesQuery } = filesApi;
+export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery } = filesApi;

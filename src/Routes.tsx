@@ -11,6 +11,7 @@ export const rootRoutes: Array<IRoute> = [
     title: 'Мои файлы',
     children: FilesRoutes,
   },
+
   {
     path: Paths.Trashcan,
     icon: DeleteOutlined,

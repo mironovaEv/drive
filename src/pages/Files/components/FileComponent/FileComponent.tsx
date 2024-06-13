@@ -12,21 +12,30 @@ import { VideoIcon } from '../../../../shared/img/files/Video';
 import { DefaultIcon } from '../../../../shared/img/files/Default';
 import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useFormatBytes';
 import { TextIcon } from '../../../../shared/img/files/Text';
+import { useNavigate } from 'react-router-dom';
 
 type FileComponentProps = {
   type: string;
   name: string;
   fileSize: number;
   trashed: boolean;
+  visible: boolean;
+  id: string;
 };
 
 const FileComponent = (file: FileComponentProps) => {
-  if (!file.trashed) {
+  const navigate = useNavigate();
+  if (!file.trashed && file.visible) {
     const size = file.fileSize ? useFormatBytes(file.fileSize) : '';
 
     if (file.type.includes('folder')) {
       return (
-        <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={FolderIcon} />}>
+        <Card
+          onDoubleClick={() => navigate(`/files/${file.id}`)}
+          className={'file-card'}
+          hoverable
+          cover={<Icon className={'file-card-icon'} component={FolderIcon} />}
+        >
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>

@@ -1,5 +1,6 @@
 export enum Paths {
   Files = 'files',
+  Folders = 'files/:id',
   Trashcan = 'trashcan',
 }
 
