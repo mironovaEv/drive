@@ -14,6 +14,7 @@ import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useForma
 import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
+import { TrashIcon } from '../../../../shared/img/files/Trash';
 
 type FileComponentProps = {
   type: string;
@@ -38,7 +39,12 @@ const FileComponent = (file: FileComponentProps) => {
           cover={<Icon className={'file-card-icon'} component={FolderIcon} />}
         >
           <div className={'file-card-settings'}>
-            <Button icon={<SettingsIcon />} className="file-card-settings-button"></Button>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -48,6 +54,14 @@ const FileComponent = (file: FileComponentProps) => {
     } else if (file.type.includes('img')) {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={ImageIcon} />}>
+          <div className={'file-card-settings'}>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
@@ -56,6 +70,14 @@ const FileComponent = (file: FileComponentProps) => {
     } else if (file.type.includes('audio')) {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={AudioIcon} />}>
+          <div className={'file-card-settings'}>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
@@ -64,6 +86,14 @@ const FileComponent = (file: FileComponentProps) => {
     } else if (file.type.includes('text')) {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={TextIcon} />}>
+          <div className={'file-card-settings'}>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
@@ -72,6 +102,14 @@ const FileComponent = (file: FileComponentProps) => {
     } else if (file.type.includes('video')) {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={VideoIcon} />}>
+          <div className={'file-card-settings'}>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
@@ -80,6 +118,14 @@ const FileComponent = (file: FileComponentProps) => {
     } else {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={DefaultIcon} />}>
+          <div className={'file-card-settings'}>
+            <div>
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+            </div>
+            <div>
+              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+            </div>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
