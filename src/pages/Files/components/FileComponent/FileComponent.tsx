@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Card, Tooltip } from 'antd';
+import { Button, Card, Tooltip } from 'antd';
 
 const { Meta } = Card;
 import './fileComponent.scss';
@@ -13,6 +13,7 @@ import { DefaultIcon } from '../../../../shared/img/files/Default';
 import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useFormatBytes';
 import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
+import { SettingsIcon } from '../../../../shared/img/files/Settings';
 
 type FileComponentProps = {
   type: string;
@@ -36,6 +37,9 @@ const FileComponent = (file: FileComponentProps) => {
           hoverable
           cover={<Icon className={'file-card-icon'} component={FolderIcon} />}
         >
+          <div className={'file-card-settings'}>
+            <Button icon={<SettingsIcon />} className="file-card-settings-button"></Button>
+          </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
           </Tooltip>
