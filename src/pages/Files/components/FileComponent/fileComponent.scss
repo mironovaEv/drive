@@ -2,7 +2,8 @@
 
 .file-card {
     border: 1px solid color.$primary;
-    width: 130px;
+    min-width: 130px;
+    max-width: 130px;
     
     
     
