@@ -14,7 +14,7 @@ import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useForma
 import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
-import { TrashIcon } from '../../../../shared/img/files/Trash';
+import { DownloadIcon } from '../../../../shared/img/files/Download';
 
 type FileComponentProps = {
   type: string;
@@ -27,6 +27,11 @@ type FileComponentProps = {
 
 const FileComponent = (file: FileComponentProps) => {
   const navigate = useNavigate();
+
+  const onDownloadFile = () => {
+    window.location.href = `http://localhost:8080/api/drive/files/download/${file.id}`;
+  };
+
   if (!file.trashed && file.visible) {
     const size = file.fileSize ? useFormatBytes(file.fileSize) : '';
 
@@ -43,7 +48,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -59,7 +64,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -75,7 +80,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -91,7 +96,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -107,7 +112,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -123,7 +128,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button icon={<TrashIcon />} className="file-card-settings-button" />
+              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
