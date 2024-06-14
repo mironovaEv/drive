@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Card, Tooltip } from 'antd';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 const { Meta } = Card;
 import './fileComponent.scss';
@@ -28,8 +30,15 @@ type FileComponentProps = {
 const FileComponent = (file: FileComponentProps) => {
   const navigate = useNavigate();
 
-  const onDownloadFile = () => {
-    window.location.href = `http://localhost:8080/api/drive/files/download/${file.id}`;
+  const handleDownload = (id: string, filename: string) => {
+    const url = 'http://localhost:8080/api/drive/files/download/' + id;
+    axios
+      .get(url, {
+        responseType: 'blob',
+      })
+      .then(res => {
+        fileDownload(res.data, filename);
+      });
   };
 
   if (!file.trashed && file.visible) {
@@ -48,7 +57,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -64,7 +73,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -80,7 +89,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -96,7 +105,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -112,7 +121,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -128,7 +137,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={onDownloadFile} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
