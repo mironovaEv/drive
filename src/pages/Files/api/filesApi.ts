@@ -32,7 +32,15 @@ export const filesApi = createApi({
       }),
       providesTags: ['Files'],
     }),
+    getDir: builder.query<IRootDir, unknown>({
+      query: params => ({
+        url: `/files/get/${params}`,
+        method: 'get',
+        params,
+      }),
+      providesTags: ['Files'],
+    }),
   }),
 });
 
-export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery } = filesApi;
+export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery } = filesApi;

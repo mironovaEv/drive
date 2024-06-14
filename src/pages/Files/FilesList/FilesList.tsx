@@ -6,18 +6,21 @@ import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
 import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
-import { FolderOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
-import { useCreateFolderMutation, useGetFilesQuery } from '../api/filesApi';
+import { useCreateFolderMutation, useGetDirQuery, useGetFilesQuery, useGetRootDirQuery } from '../api/filesApi';
 import { FormMode } from '../types';
 import { IFolder } from '../api/types';
+import { useNavigate } from 'react-router-dom';
 import CreateRecordModal from '../components/createFolderModal/createFolder';
 import { useGetFolderId } from '../../../shared/hooks/useGetFolderId/useGetFolderId';
+import { useParams } from 'react-router-dom';
 
 const b = block('files-list');
 const { Content } = Layout;
 
 const FilesList: React.FC = () => {
+  const navigate = useNavigate();
   const { setConfig } = useLayoutConfig();
   const { data: dataFiles } = useGetFilesQuery(undefined);
 
@@ -26,8 +29,12 @@ const FilesList: React.FC = () => {
   const [initialValues, setInitialValues] = useState<IFolder | object>({});
 
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
-
   const folderId = useGetFolderId();
+
+  const isDisabled = !useParams().folderId || useParams().folderId === useGetRootDirQuery({}).data?.id ? true : false;
+
+  const parentIds = useGetDirQuery(folderId).data?.parents;
+  const parent = parentIds ? parentIds[0] : '';
 
   const handleAddFolder = useCallback(() => {
     setFormCreateRecordMode(FormMode.Create);
@@ -69,11 +76,17 @@ const FilesList: React.FC = () => {
       <MainHeader>
         <div className={b('main-buttons')}>
           <div className={b('main-buttons-container').toString()}>
-            <Button onClick={handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 17 }} />}>
+            <Button
+              disabled={isDisabled}
+              onClick={() => navigate(`/files/${parent}`)}
+              className={b('main-button').toString()}
+              icon={<DoubleLeftOutlined style={{ fontSize: 20 }} />}
+            ></Button>
+            <Button onClick={handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
             <Upload multiple {...props} className={b('main-button-upload').toString()}>
-              <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 18 }} />}>
+              <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 20 }} />}>
                 <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
             </Upload>

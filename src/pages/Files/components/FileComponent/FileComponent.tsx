@@ -57,7 +57,7 @@ const FileComponent = (file: FileComponentProps) => {
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>

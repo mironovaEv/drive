@@ -24,4 +24,5 @@ export interface IRootDir {
   id: string;
   name: string;
   mimeType: string;
+  parents: string[];
 }
