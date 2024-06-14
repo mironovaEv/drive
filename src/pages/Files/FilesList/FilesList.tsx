@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Layout, Upload } from 'antd';
+import { Button, Layout, Upload, UploadProps, message } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
 import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
@@ -45,6 +45,21 @@ const FilesList: React.FC = () => {
     },
     [create, folderId]
   );
+  const props: UploadProps = {
+    name: 'files',
+    action: 'http://localhost:8080/api/drive/files/upload?targetFolderId=' + folderId,
+
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
   useEffect(() => {
     setConfig({ activeMenuKey: Paths.Files, headerTitle: 'Мои файлы' });
@@ -57,7 +72,7 @@ const FilesList: React.FC = () => {
             <Button onClick={handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 17 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
-            <Upload className={b('main-button-upload').toString()}>
+            <Upload multiple {...props} className={b('main-button-upload').toString()}>
               <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 18 }} />}>
                 <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
