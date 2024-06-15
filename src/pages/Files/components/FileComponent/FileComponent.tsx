@@ -17,6 +17,7 @@ import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { DownloadIcon } from '../../../../shared/img/files/Download';
+import { useCallback } from 'react';
 
 type FileComponentProps = {
   type: string;
@@ -41,17 +42,19 @@ const FileComponent = (file: FileComponentProps) => {
       });
   };
 
+  const goFolder = useCallback(
+    folder => {
+      navigate(`/files/${folder}`);
+    },
+    [navigate]
+  );
+
   if (!file.trashed && file.visible) {
     const size = file.fileSize ? useFormatBytes(file.fileSize) : '';
 
     if (file.type.includes('folder')) {
       return (
-        <Card
-          onDoubleClick={() => navigate(`/files/${file.id}`)}
-          className={'file-card'}
-          hoverable
-          cover={<Icon className={'file-card-icon'} component={FolderIcon} />}
-        >
+        <Card onDoubleClick={() => goFolder(file.id)} className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={FolderIcon} />}>
           <div className={'file-card-settings'}>
             <div>
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />

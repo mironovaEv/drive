@@ -5,6 +5,7 @@ export const useGetFolderId = () => {
   const rootDir = useGetRootDirQuery({}).data;
 
   let { folderId } = useParams();
+
   if (rootDir) {
     if (folderId === '' || folderId == undefined) folderId = rootDir.id;
   }

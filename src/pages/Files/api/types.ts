@@ -18,7 +18,7 @@ export interface IFile {
 
 export interface IFolder {
   folderName: string;
-  targetFolderId: string;
+  targetFolderId: string | undefined;
 }
 export interface IRootDir {
   id: string;

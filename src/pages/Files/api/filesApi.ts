@@ -32,7 +32,7 @@ export const filesApi = createApi({
       }),
       providesTags: ['Files'],
     }),
-    getDir: builder.query<IRootDir, unknown>({
+    getDir: builder.query<IRootDir, string | undefined>({
       query: params => ({
         url: `/files/get/${params}`,
         method: 'get',

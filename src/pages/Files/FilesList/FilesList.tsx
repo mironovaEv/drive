@@ -14,7 +14,6 @@ import { IFolder } from '../api/types';
 import { useNavigate } from 'react-router-dom';
 import CreateRecordModal from '../components/createFolderModal/createFolder';
 import { useGetFolderId } from '../../../shared/hooks/useGetFolderId/useGetFolderId';
-import { useParams } from 'react-router-dom';
 
 const b = block('files-list');
 const { Content } = Layout;
@@ -31,10 +30,9 @@ const FilesList: React.FC = () => {
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
   const folderId = useGetFolderId();
 
-  const isDisabled = !useParams().folderId || useParams().folderId === useGetRootDirQuery({}).data?.id ? true : false;
-
-  const parentIds = useGetDirQuery(folderId).data?.parents;
-  const parent = parentIds ? parentIds[0] : '';
+  const isDisabled = folderId === useGetRootDirQuery({}).data?.id ? true : false;
+  const { data: currentDirectory } = useGetDirQuery(folderId);
+  const prevDirId = currentDirectory?.parents ? currentDirectory.parents[0] : null;
 
   const handleAddFolder = useCallback(() => {
     setFormCreateRecordMode(FormMode.Create);
@@ -46,7 +44,7 @@ const FilesList: React.FC = () => {
     async (values: IFolder) => {
       const result = await create({
         folderName: values.folderName,
-        targetFolderId: folderId!,
+        targetFolderId: folderId,
       });
       return result;
     },
@@ -68,6 +66,13 @@ const FilesList: React.FC = () => {
     },
   };
 
+  const goParent = useCallback(
+    parent => {
+      navigate(`/files/${parent}`);
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     setConfig({ activeMenuKey: Paths.Files, headerTitle: 'Мои файлы' });
   }, [setConfig]);
@@ -78,11 +83,11 @@ const FilesList: React.FC = () => {
           <div className={b('main-buttons-container').toString()}>
             <Button
               disabled={isDisabled}
-              onClick={() => navigate(`/files/${parent}`)}
+              onClick={() => goParent(prevDirId)}
               className={b('main-button').toString()}
               icon={<DoubleLeftOutlined style={{ fontSize: 20 }} />}
             ></Button>
-            <Button onClick={handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
+            <Button onClick={() => handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
             <Upload multiple {...props} className={b('main-button-upload').toString()}>
@@ -98,7 +103,7 @@ const FilesList: React.FC = () => {
           {dataFiles?.map(file => (
             <FileComponent
               id={file.id}
-              visible={file.parents[0] === folderId}
+              visible={file.parents[0] === folderId && !file.trashed}
               key={file.id}
               trashed={file.trashed}
               type={file.mimeType}
