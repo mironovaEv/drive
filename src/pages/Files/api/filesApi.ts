@@ -40,7 +40,15 @@ export const filesApi = createApi({
       }),
       providesTags: ['Files'],
     }),
+    deleteFiles: builder.mutation<undefined, string[]>({
+      query: data => ({
+        url: '/files/delete',
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
-export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery } = filesApi;
+export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery, useDeleteFilesMutation } = filesApi;

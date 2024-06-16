@@ -6,9 +6,9 @@ import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
 import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
-import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined } from '@ant-design/icons';
+import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
-import { useCreateFolderMutation, useGetDirQuery, useGetFilesQuery, useGetRootDirQuery } from '../api/filesApi';
+import { useCreateFolderMutation, useDeleteFilesMutation, useGetDirQuery, useGetFilesQuery, useGetRootDirQuery } from '../api/filesApi';
 import { FormMode } from '../types';
 import { IFolder } from '../api/types';
 import { useNavigate } from 'react-router-dom';
@@ -22,16 +22,18 @@ const FilesList: React.FC = () => {
   const navigate = useNavigate();
   const { setConfig } = useLayoutConfig();
   const { data: dataFiles } = useGetFilesQuery(undefined);
+  const [checkedToDelete, setCheckedToDelete] = useState<string[]>([]);
 
   const [showCreateRecordModal, setShowCreateRecordModal] = useState(false);
   const [formCreateRecordMode, setFormCreateRecordMode] = useState<FormMode>(FormMode.Create);
   const [initialValues, setInitialValues] = useState<IFolder | object>({});
 
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
+  const [deleteFiles, { isLoading: isLoadingDelete }] = useDeleteFilesMutation();
   const folderId = useGetFolderId();
 
   const isDisabled = folderId === useGetRootDirQuery({}).data?.id ? true : false;
-  const { data: currentDirectory } = useGetDirQuery(folderId);
+  const { data: currentDirectory } = useGetDirQuery(folderId, { skip: folderId === undefined });
   const prevDirId = currentDirectory?.parents ? currentDirectory.parents[0] : null;
 
   const handleAddFolder = useCallback(() => {
@@ -50,6 +52,13 @@ const FilesList: React.FC = () => {
     },
     [create, folderId]
   );
+
+  const onDeleteFiles = useCallback(async () => {
+    const result = checkedToDelete.length > 0 ? await deleteFiles(checkedToDelete) : null;
+    setCheckedToDelete([]);
+    return result;
+  }, [checkedToDelete, deleteFiles]);
+
   const props: UploadProps = {
     name: 'files',
     action: 'http://localhost:8080/api/drive/files/upload?targetFolderId=' + folderId,
@@ -68,10 +77,25 @@ const FilesList: React.FC = () => {
 
   const goParent = useCallback(
     parent => {
+      setCheckedToDelete([]);
       navigate(`/files/${parent}`);
     },
     [navigate]
   );
+
+  const setDelete = (id: string) => {
+    const newArr = checkedToDelete;
+    newArr.push(id);
+    setCheckedToDelete(newArr);
+    console.log(checkedToDelete);
+  };
+
+  const cancelDelete = (id: string) => {
+    const newArr = checkedToDelete;
+    newArr.splice(newArr.indexOf(id), 1);
+    setCheckedToDelete(newArr);
+    console.log(checkedToDelete);
+  };
 
   useEffect(() => {
     setConfig({ activeMenuKey: Paths.Files, headerTitle: 'Мои файлы' });
@@ -95,6 +119,14 @@ const FilesList: React.FC = () => {
                 <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
             </Upload>
+            <Button
+              disabled={isLoadingDelete}
+              onClick={onDeleteFiles}
+              className={b('main-button').toString()}
+              icon={<DeleteOutlined style={{ fontSize: 20 }} />}
+            >
+              <div className={b('main-button-text').toString()}>Удалить</div>
+            </Button>
           </div>
         </div>
       </MainHeader>
@@ -102,6 +134,9 @@ const FilesList: React.FC = () => {
         <div className={b('files-container').toString()}>
           {dataFiles?.map(file => (
             <FileComponent
+              setCheckedToDelete={setCheckedToDelete}
+              onSetDel={setDelete}
+              onCancelDel={cancelDelete}
               id={file.id}
               visible={file.parents[0] === folderId && !file.trashed}
               key={file.id}

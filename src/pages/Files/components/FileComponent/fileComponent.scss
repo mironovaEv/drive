@@ -21,12 +21,30 @@
 }
 .file-card-settings {
     position: absolute;
-    display: block;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
     top: 0;
     right: 0;
     
 
 }
+.file-card:hover .file-card-settings-checkbox{
+    visibility: visible;
+}
+.ant-checkbox-checked{
+    visibility: visible;
+}
+
+.file-card-settings-checkbox{
+    margin-left: 5px;
+    margin-top: 2px;
+    visibility: hidden;
+    
+
+}
+
+
 .file-card-settings-button {
     border: 0;
     padding: 0;

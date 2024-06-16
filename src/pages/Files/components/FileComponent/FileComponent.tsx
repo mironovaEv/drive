@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Tooltip } from 'antd';
+import { Button, Card, Checkbox, Tooltip } from 'antd';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 
@@ -17,7 +17,7 @@ import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { DownloadIcon } from '../../../../shared/img/files/Download';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 type FileComponentProps = {
   type: string;
@@ -26,27 +26,35 @@ type FileComponentProps = {
   trashed: boolean;
   visible: boolean;
   id: string;
+  onSetDel: (id: string) => void;
+  onCancelDel: (id: string) => void;
+  setCheckedToDelete: (id: string[]) => void;
 };
 
 const FileComponent = (file: FileComponentProps) => {
+  const [checked, setChecked] = useState<boolean>();
   const navigate = useNavigate();
+
+  const onChange = () => {
+    setChecked(!checked);
+    if (!checked) {
+      file.onSetDel(file.id);
+    } else file.onCancelDel(file.id);
+  };
 
   const handleDownload = (id: string, filename: string) => {
     const url = 'http://localhost:8080/api/drive/files/download/' + id;
-    axios
-      .get(url, {
-        responseType: 'blob',
-      })
-      .then(res => {
-        fileDownload(res.data, filename);
-      });
+    axios.get(url, {}).then(res => {
+      fileDownload(res.data, filename);
+    });
   };
 
   const goFolder = useCallback(
     folder => {
+      file.setCheckedToDelete([]);
       navigate(`/files/${folder}`);
     },
-    [navigate]
+    [file, navigate]
   );
 
   if (!file.trashed && file.visible) {
@@ -57,7 +65,7 @@ const FileComponent = (file: FileComponentProps) => {
         <Card onDoubleClick={() => goFolder(file.id)} className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={FolderIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
               <Button icon={<SettingsIcon />} className="file-card-settings-button" />
@@ -73,10 +81,15 @@ const FileComponent = (file: FileComponentProps) => {
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={ImageIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <div>
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </div>
+              <div>
+                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              </div>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -89,10 +102,15 @@ const FileComponent = (file: FileComponentProps) => {
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={AudioIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <div>
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </div>
+              <div>
+                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              </div>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -105,10 +123,15 @@ const FileComponent = (file: FileComponentProps) => {
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={TextIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <div>
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </div>
+              <div>
+                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              </div>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -121,10 +144,15 @@ const FileComponent = (file: FileComponentProps) => {
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={VideoIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <div>
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </div>
+              <div>
+                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              </div>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -137,10 +165,15 @@ const FileComponent = (file: FileComponentProps) => {
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={DefaultIcon} />}>
           <div className={'file-card-settings'}>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              <div>
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </div>
+              <div>
+                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+              </div>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>

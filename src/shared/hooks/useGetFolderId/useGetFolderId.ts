@@ -9,6 +9,5 @@ export const useGetFolderId = () => {
   if (rootDir) {
     if (folderId === '' || folderId == undefined) folderId = rootDir.id;
   }
-
   return folderId;
 };
