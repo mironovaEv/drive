@@ -42,10 +42,12 @@ const FileComponent = (file: FileComponentProps) => {
     } else file.onCancelDel(file.id);
   };
 
-  const handleDownload = (id: string, filename: string) => {
+  const handleDownload = (id: string) => {
     const url = 'http://localhost:8080/api/drive/files/download/' + id;
     axios.get(url, {}).then(res => {
-      fileDownload(res.data, filename);
+      let nameHeader = JSON.parse(JSON.stringify(res.headers))['content-disposition'];
+      nameHeader = nameHeader.split('=').pop();
+      fileDownload(res.data, nameHeader);
     });
   };
 
@@ -88,7 +90,7 @@ const FileComponent = (file: FileComponentProps) => {
                 <Button icon={<SettingsIcon />} className="file-card-settings-button" />
               </div>
               <div>
-                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+                <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
               </div>
             </div>
           </div>
@@ -109,7 +111,7 @@ const FileComponent = (file: FileComponentProps) => {
                 <Button icon={<SettingsIcon />} className="file-card-settings-button" />
               </div>
               <div>
-                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+                <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
               </div>
             </div>
           </div>
@@ -130,7 +132,7 @@ const FileComponent = (file: FileComponentProps) => {
                 <Button icon={<SettingsIcon />} className="file-card-settings-button" />
               </div>
               <div>
-                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+                <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
               </div>
             </div>
           </div>
@@ -151,7 +153,7 @@ const FileComponent = (file: FileComponentProps) => {
                 <Button icon={<SettingsIcon />} className="file-card-settings-button" />
               </div>
               <div>
-                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+                <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
               </div>
             </div>
           </div>
@@ -172,7 +174,7 @@ const FileComponent = (file: FileComponentProps) => {
                 <Button icon={<SettingsIcon />} className="file-card-settings-button" />
               </div>
               <div>
-                <Button onClick={() => handleDownload(file.id, file.name)} icon={<DownloadIcon />} className="file-card-settings-button" />
+                <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
               </div>
             </div>
           </div>
