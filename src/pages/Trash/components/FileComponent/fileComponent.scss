@@ -1,0 +1,71 @@
+@use '/src/shared/scss/color';
+
+.file-card {
+    border: 1px solid color.$primary;
+    min-width: 130px;
+    max-width: 130px;
+    position: relative;
+    
+    
+    
+
+}
+.file-card:hover{
+    background-color: #f2e8fa;
+}
+
+.file-card:hover .file-card-settings-button{
+    visibility: visible;
+    transition: all 0.5s ease 0s;
+    background: transparent;
+}
+.file-card-settings {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    top: 0;
+    right: 0;
+    
+
+}
+.file-card:hover .file-card-settings-checkbox{
+    visibility: visible;
+}
+.ant-checkbox-checked{
+    visibility: visible;
+}
+
+.file-card-settings-checkbox{
+    margin-left: 5px;
+    margin-top: 2px;
+    visibility: hidden;
+    
+
+}
+
+
+.file-card-settings-button {
+    border: 0;
+    padding: 0;
+    margin-top: 2px;
+    max-height: 22px;
+    max-width: 22px;
+    visibility: hidden;
+    background: transparent;
+    transition: all 0.15s ease 0s;
+    
+
+}
+.file-card-icon {
+    padding: 5px;
+    padding-bottom: 0;
+    width: 100px;
+    margin: auto;
+    
+    
+
+}
+.ant-card-body{
+    padding: 10px;
+}

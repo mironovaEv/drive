@@ -42,7 +42,7 @@ export const filesApi = createApi({
     }),
     deleteFiles: builder.mutation<undefined, string[]>({
       query: data => ({
-        url: '/files/delete',
+        url: '/files/trash',
         method: 'post',
         data,
       }),

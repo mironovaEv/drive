@@ -125,7 +125,7 @@ const FilesList: React.FC = () => {
               className={b('main-button').toString()}
               icon={<DeleteOutlined style={{ fontSize: 20 }} />}
             >
-              <div className={b('main-button-text').toString()}>Удалить</div>
+              <div className={b('main-button-text').toString()}>Отправить в корзину</div>
             </Button>
           </div>
         </div>

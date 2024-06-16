@@ -16,5 +16,22 @@
         gap: 10px;
         justify-content: flex-start;
     }
+    &__main-button {
+        font-size: 24px;
+        margin: 0 auto;
+        display:flex;
+        padding: 20px;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        
+    }
+    &__files-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap:15px;
+        
+        
+    }
 
 }
