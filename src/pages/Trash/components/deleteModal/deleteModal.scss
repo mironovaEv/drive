@@ -1,0 +1,66 @@
+@use '/src/shared/scss/color';
+
+.companies {
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+        align-items: center;
+    }
+    h5.ant-typography {
+        margin: 0 !important;
+        color: color.$primary;
+    }
+    .ant-collapse-header {
+        border-bottom: 1px solid color.$placeholder;
+    }
+    .ant-collapse-content-box {
+        background-color: color.$hover;
+    }
+    .ant-collapse > .ant-collapse-item:last-child, .ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header {
+        border-radius: 0;
+    }
+    .ant-descriptions-header {
+        margin-top: 20px;
+    }
+    .ant-descriptions {
+        margin-top: 20px;
+    }
+    .ant-list-item-action{
+        margin: 0;
+        .ant-btn {
+            padding: 0;
+            font-size: 13x;
+        }
+    }
+    .ant-list-split .ant-list-item {
+        border-bottom: 1px solid #d4c9c9;
+    }
+    .ant-btn.ant-btn-block {
+        width: max-content;
+        display: block;
+    }
+    .ant-list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 !important;
+        margin-top: 10px;
+    }
+    .ant-list-vertical .ant-list-item-meta-title {
+        margin-bottom: 2px;
+    }
+
+    &__delete-company-btn {
+        display: none;
+        &:hover {
+            color: red
+        }
+    }
+
+    &__edit-company-btn {
+        display: none;
+    }
+
+    .ant-collapse-item:hover {
+            .companies__delete-company-btn, .companies__edit-company-btn {
+                display: inline-block !important
+            }
+    }
+}
