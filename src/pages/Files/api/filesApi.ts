@@ -55,7 +55,23 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files', 'Trash'],
     }),
+    untrash: builder.mutation<undefined, string[]>({
+      query: data => ({
+        url: '/files/untrash',
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Trash', 'Files'],
+    }),
   }),
 });
 
-export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery, useDeleteFilesMutation, useEmptyTrashMutation } = filesApi;
+export const {
+  useGetFilesQuery,
+  useCreateFolderMutation,
+  useGetRootDirQuery,
+  useGetDirQuery,
+  useDeleteFilesMutation,
+  useEmptyTrashMutation,
+  useUntrashMutation,
+} = filesApi;

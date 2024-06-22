@@ -14,6 +14,7 @@ import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useForma
 import { TextIcon } from '../../../../shared/img/files/Text';
 
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
+import { useState } from 'react';
 
 type FileComponentProps = {
   type: string;
@@ -22,16 +23,19 @@ type FileComponentProps = {
   trashed: boolean;
   visible: boolean;
   id: string;
+  onSetUntrash: (id: string) => void;
+  onCancelUntrash: (id: string) => void;
+  setCheckedToUntrash: (id: string[]) => void;
 };
 
 const FileComponent = (file: FileComponentProps) => {
-  // const [checked, setChecked] = useState<boolean>();
+  const [checked, setChecked] = useState<boolean>();
 
   const onChange = () => {
-    // setChecked(!checked);
-    // if (!checked) {
-    //   file.onSetDel(file.id);
-    // } else file.onCancelDel(file.id);
+    setChecked(!checked);
+    if (!checked) {
+      file.onSetUntrash(file.id);
+    } else file.onCancelUntrash(file.id);
   };
 
   if (file.trashed && file.visible) {
