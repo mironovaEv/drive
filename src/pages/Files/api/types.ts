@@ -1,3 +1,5 @@
+import { IUser } from '../../../features/UserBlock/api/types';
+
 type Permission = {
   role: string;
   type: string;
@@ -25,4 +27,13 @@ export interface IRootDir {
   name: string;
   mimeType: string;
   parents: string[];
+}
+
+export interface IRevision {
+  id: string;
+  lastModifyingUser: IUser;
+  mimeType: string;
+  modifiedTime: Date;
+  originalFileName: string;
+  size: number;
 }

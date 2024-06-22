@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { IFile, IFolder, IRootDir } from './types';
+import { IFile, IFolder, IRevision, IRootDir } from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: axiosBaseQuery('/api/drive'),
-  tagTypes: ['Files', 'Trash'],
+  tagTypes: ['Files', 'Trash', 'Changes'],
   endpoints: builder => ({
     getFiles: builder.query<IFile[], unknown>({
       query: params => ({
@@ -63,6 +63,14 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Trash', 'Files'],
     }),
+    getChanges: builder.query<IRevision[], string>({
+      query: params => ({
+        url: `/files/${params}/revisions`,
+        method: 'get',
+        params,
+      }),
+      providesTags: ['Files', 'Changes'],
+    }),
   }),
 });
 
@@ -74,4 +82,5 @@ export const {
   useDeleteFilesMutation,
   useEmptyTrashMutation,
   useUntrashMutation,
+  useGetChangesQuery,
 } = filesApi;

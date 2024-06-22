@@ -1,0 +1,46 @@
+.changes-modal {
+
+    
+    &__change-container{
+        display: flex;
+    }
+   
+
+    &__info  {
+        margin: auto 15px auto 10px;
+        width: max-content;
+    }
+
+    &__info-name {
+        font-size: 18px;
+        font-weight: 500;
+           
+    }
+    &__user-info{
+        display: flex;
+    }
+
+    &__info-text  {
+        margin-top: 2px;
+    }
+   
+    
+}
+
+.ant-descriptions-item {
+    padding: 1px !important;
+    margin: 0;
+    display: block;
+    
+}
+
+.ant-descriptions-item-content {
+    font-size: 16px;
+    display: block;
+}
+
+.ant-descriptions-item-label, .ant-form-item-label > label {
+    font-size: 15px !important;
+    font-weight:500
+}
+
