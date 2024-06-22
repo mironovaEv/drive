@@ -6,10 +6,11 @@ import MainHeader from '../../../features/MainHeader/MainHeader';
 import './TrashList.scss';
 import { Button, Layout } from 'antd';
 import { FolderOutlined } from '@ant-design/icons';
-import { useGetFilesQuery } from '../../Files/api/filesApi';
+
 import FileComponent from '../components/FileComponent/FileComponent';
-import { useEmptyTrashMutation } from '../api/trashApi';
+
 import DeleteModal from '../components/deleteModal/deleteModal';
+import { useEmptyTrashMutation, useGetFilesQuery } from '../../Files/api/filesApi';
 
 const b = block('trash-list');
 const { Content } = Layout;

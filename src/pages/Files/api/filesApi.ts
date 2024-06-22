@@ -6,7 +6,7 @@ import { IFile, IFolder, IRootDir } from './types';
 export const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: axiosBaseQuery('/api/drive'),
-  tagTypes: ['Files'],
+  tagTypes: ['Files', 'Trash'],
   endpoints: builder => ({
     getFiles: builder.query<IFile[], unknown>({
       query: params => ({
@@ -14,7 +14,7 @@ export const filesApi = createApi({
         method: 'get',
         params,
       }),
-      providesTags: ['Files'],
+      providesTags: ['Files', 'Trash'],
     }),
     createFolder: builder.mutation<undefined, IFolder>({
       query: data => ({
@@ -22,7 +22,7 @@ export const filesApi = createApi({
         method: 'post',
         data,
       }),
-      invalidatesTags: ['Files'],
+      invalidatesTags: ['Files', 'Trash'],
     }),
     getRootDir: builder.query<IRootDir, unknown>({
       query: params => ({
@@ -30,7 +30,7 @@ export const filesApi = createApi({
         method: 'get',
         params,
       }),
-      providesTags: ['Files'],
+      providesTags: ['Files', 'Trash'],
     }),
     getDir: builder.query<IRootDir, string | undefined>({
       query: params => ({
@@ -38,7 +38,7 @@ export const filesApi = createApi({
         method: 'get',
         params,
       }),
-      providesTags: ['Files'],
+      providesTags: ['Files', 'Trash'],
     }),
     deleteFiles: builder.mutation<undefined, string[]>({
       query: data => ({
@@ -46,9 +46,16 @@ export const filesApi = createApi({
         method: 'post',
         data,
       }),
-      invalidatesTags: ['Files'],
+      invalidatesTags: ['Files', 'Trash'],
+    }),
+    emptyTrash: builder.mutation<undefined, undefined>({
+      query: () => ({
+        url: '/files/trash',
+        method: 'delete',
+      }),
+      invalidatesTags: ['Files', 'Trash'],
     }),
   }),
 });
 
-export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery, useDeleteFilesMutation } = filesApi;
+export const { useGetFilesQuery, useCreateFolderMutation, useGetRootDirQuery, useGetDirQuery, useDeleteFilesMutation, useEmptyTrashMutation } = filesApi;

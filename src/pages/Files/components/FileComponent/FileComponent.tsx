@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Checkbox, Tooltip } from 'antd';
+import { Button, Card, Checkbox, Popover, Tooltip } from 'antd';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 
@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { DownloadIcon } from '../../../../shared/img/files/Download';
 import { useCallback, useState } from 'react';
+import FileMenu from '../FileMenu/fileMenu';
 
 type FileComponentProps = {
   type: string;
@@ -34,6 +35,12 @@ type FileComponentProps = {
 const FileComponent = (file: FileComponentProps) => {
   const [checked, setChecked] = useState<boolean>();
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+  };
 
   const onChange = () => {
     setChecked(!checked);
@@ -70,7 +77,17 @@ const FileComponent = (file: FileComponentProps) => {
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
             <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              <Popover
+                className="popover-menu"
+                content={<FileMenu />}
+                placement="rightTop"
+                showArrow={false}
+                trigger="click"
+                open={open}
+                onOpenChange={handleOpenChange}
+              >
+                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+              </Popover>
             </div>
           </div>
           <Tooltip placement="right" title={file.name}>
@@ -87,7 +104,17 @@ const FileComponent = (file: FileComponentProps) => {
             </div>
             <div>
               <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Popover
+                  className="popover-menu"
+                  content={<FileMenu />}
+                  placement="rightTop"
+                  showArrow={false}
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                </Popover>
               </div>
               <div>
                 <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
@@ -108,7 +135,17 @@ const FileComponent = (file: FileComponentProps) => {
             </div>
             <div>
               <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Popover
+                  className="popover-menu"
+                  content={<FileMenu />}
+                  placement="rightTop"
+                  showArrow={false}
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                </Popover>
               </div>
               <div>
                 <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
@@ -129,7 +166,17 @@ const FileComponent = (file: FileComponentProps) => {
             </div>
             <div>
               <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Popover
+                  className="popover-menu"
+                  content={<FileMenu />}
+                  placement="rightTop"
+                  showArrow={false}
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                </Popover>
               </div>
               <div>
                 <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
@@ -150,7 +197,17 @@ const FileComponent = (file: FileComponentProps) => {
             </div>
             <div>
               <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Popover
+                  className="popover-menu"
+                  content={<FileMenu />}
+                  placement="rightTop"
+                  showArrow={false}
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                </Popover>
               </div>
               <div>
                 <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
@@ -171,7 +228,17 @@ const FileComponent = (file: FileComponentProps) => {
             </div>
             <div>
               <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Popover
+                  className="popover-menu"
+                  content={<FileMenu />}
+                  placement="rightTop"
+                  showArrow={false}
+                  trigger="click"
+                  open={open}
+                  onOpenChange={handleOpenChange}
+                >
+                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                </Popover>
               </div>
               <div>
                 <Button onClick={() => handleDownload(file.id)} icon={<DownloadIcon />} className="file-card-settings-button" />
