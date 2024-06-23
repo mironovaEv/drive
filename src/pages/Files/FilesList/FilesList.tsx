@@ -56,6 +56,7 @@ const FilesList: React.FC = () => {
   const onDeleteFiles = useCallback(async () => {
     const result = checkedToDelete.length > 0 ? await deleteFiles(checkedToDelete) : null;
     setCheckedToDelete([]);
+
     return result;
   }, [checkedToDelete, deleteFiles]);
 
@@ -134,6 +135,7 @@ const FilesList: React.FC = () => {
         <div className={b('files-container').toString()}>
           {dataFiles?.map(file => (
             <FileComponent
+              permissions={file.permissions}
               setCheckedToDelete={setCheckedToDelete}
               onSetDel={setDelete}
               onCancelDel={cancelDelete}

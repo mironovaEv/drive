@@ -19,6 +19,7 @@ import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { DownloadIcon } from '../../../../shared/img/files/Download';
 import { useCallback, useState } from 'react';
 import FileMenu from '../FileMenu/fileMenu';
+import { IPermission } from '../../api/types';
 
 type FileComponentProps = {
   type: string;
@@ -26,6 +27,7 @@ type FileComponentProps = {
   fileSize: number;
   trashed: boolean;
   visible: boolean;
+  permissions: IPermission[];
   id: string;
   onSetDel: (id: string) => void;
   onCancelDel: (id: string) => void;
@@ -79,7 +81,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Popover
                 className="popover-menu"
-                content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                content={<FileMenu setOpen={setOpen} file={file} />}
                 placement="rightTop"
                 showArrow={false}
                 trigger="click"
@@ -106,7 +108,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                  content={<FileMenu setOpen={setOpen} file={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -137,7 +139,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                  content={<FileMenu setOpen={setOpen} file={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -168,7 +170,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                  content={<FileMenu setOpen={setOpen} file={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -199,7 +201,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                  content={<FileMenu setOpen={setOpen} file={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -230,7 +232,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} fileId={file.id} />}
+                  content={<FileMenu setOpen={setOpen} file={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"

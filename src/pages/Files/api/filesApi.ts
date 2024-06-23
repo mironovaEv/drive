@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { IFile, IFolder, IRevision, IRootDir } from './types';
+import { ICreatePermission, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: axiosBaseQuery('/api/drive'),
-  tagTypes: ['Files', 'Trash', 'Changes'],
+  tagTypes: ['Files', 'Trash', 'Changes', 'Permission'],
   endpoints: builder => ({
     getFiles: builder.query<IFile[], unknown>({
       query: params => ({
@@ -71,6 +71,31 @@ export const filesApi = createApi({
       }),
       providesTags: ['Files', 'Changes'],
     }),
+    updatePermission: builder.mutation<undefined, IEditPermission>({
+      query: data => ({
+        url: `/files/${data.fileId}/permissions/update/${data.permissionId}`,
+        method: 'patch',
+        data,
+      }),
+      invalidatesTags: ['Files', 'Permission'],
+    }),
+
+    addPermission: builder.mutation<undefined, ICreatePermission>({
+      query: data => ({
+        url: `/files/${data.fileId}/permissions/add`,
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files', 'Permission'],
+    }),
+
+    revokePermission: builder.mutation<undefined, { permissionId: string; fileId: string }>({
+      query: params => ({
+        url: `/files/${params.fileId}/permissions/revoke/${params.permissionId}`,
+        method: 'post',
+      }),
+      invalidatesTags: ['Files', 'Permission'],
+    }),
   }),
 });
 
@@ -83,4 +108,7 @@ export const {
   useEmptyTrashMutation,
   useUntrashMutation,
   useGetChangesQuery,
+  useUpdatePermissionMutation,
+  useAddPermissionMutation,
+  useRevokePermissionMutation,
 } = filesApi;
