@@ -21,7 +21,7 @@ import { useCallback, useState } from 'react';
 import FileMenu from '../FileMenu/fileMenu';
 import { IPermission } from '../../api/types';
 
-type FileComponentProps = {
+export type FileComponentProps = {
   type: string;
   name: string;
   fileSize: number;

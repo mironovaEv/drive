@@ -20,10 +20,10 @@ const getSize = (size: number) => {
   return formatSize;
 };
 
-const ChangesModal: React.FC<IViewModalProps> = ({ modal, fileId }) => {
+const ChangesModal: React.FC<IViewModalProps> = ({ modal, file }) => {
   const { visible, setVisible } = modal;
 
-  const { data: dataChanges } = useGetChangesQuery(fileId);
+  const { data: dataChanges } = useGetChangesQuery(file.id, { skip: file.type.includes('folder') });
 
   return (
     <Modal

@@ -1,4 +1,5 @@
 import { ICreatePermission, IFile, IFolder } from './api/types';
+import { FileComponentProps } from './components/FileComponent/FileComponent';
 
 export const enum FormMode {
   Create = 'Create',
@@ -14,7 +15,7 @@ export interface IModalProps<T, K> {
 
 export interface IViewModalProps {
   onOpen?: () => Promise<{ data?: IFolder } | { error: unknown }>;
-  fileId: string;
+  file: FileComponentProps;
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
 }
 

@@ -4,7 +4,7 @@ import { CommentOutlined, HistoryOutlined, LockOutlined } from '@ant-design/icon
 import ChangesModal from '../changesModal/changesModal';
 import { useCallback, useState } from 'react';
 import PermissionModal from '../permissionModal/PermissionModal';
-import { ICreatePermission } from '../../api/types';
+import { ICreatePermission, IFile } from '../../api/types';
 import { useAddPermissionMutation } from '../../api/filesApi';
 
 const FileMenu = ({ setOpen, file }) => {
@@ -21,13 +21,14 @@ const FileMenu = ({ setOpen, file }) => {
     },
     [create]
   );
+  console.log(file);
   return (
     <>
       <Content>
         <div className="menu-container">
           <div>
             <button
-              className="menu-button"
+              className={`menu-button ${file.type?.includes('folder') ? 'noVis' : ''}`}
               onClick={e => {
                 e.stopPropagation();
                 setOpen(false);
@@ -61,7 +62,7 @@ const FileMenu = ({ setOpen, file }) => {
         </div>
       </Content>
       <ChangesModal
-        fileId={file.id}
+        file={file}
         modal={{
           visible: showChangesModal,
           setVisible: setShowChangesModal,
