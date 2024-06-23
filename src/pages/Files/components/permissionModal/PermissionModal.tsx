@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Form, Input, Modal, Row, Select } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, Modal, Row, Select, Tooltip } from 'antd';
 import block from 'bem-cn';
 import { iPermissionModalProps } from '../../types';
 
@@ -13,7 +13,7 @@ import eventEmitter from '../../../../shared/helpers/eventEmmiter';
 
 const b = block('permission-modal');
 
-const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ initialValues, onSave, modal, fileId, filePermissions }) => {
+const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ initialValues, onSave, modal, file }) => {
   const { visible, setVisible } = modal;
   const [form] = Form.useForm();
 
@@ -45,7 +45,7 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
   const onChangeRole = useCallback(
     async (permissionId: string, value: string) => {
       try {
-        const result = await change({ fileId: fileId, permissionId: permissionId, role: value });
+        const result = await change({ fileId: file.id, permissionId: permissionId, role: value });
         if ('error' in result) {
           console.log('error');
           return;
@@ -57,13 +57,13 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
         return;
       }
     },
-    [change, fileId]
+    [change, file]
   );
 
   const onDeletePermission = useCallback(
     async (permissionId: string) => {
       try {
-        const result = await revoke({ fileId: fileId, permissionId: permissionId });
+        const result = await revoke({ fileId: file.id, permissionId: permissionId });
         if ('error' in result) {
           console.log('error');
           return;
@@ -75,13 +75,13 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
         return;
       }
     },
-    [fileId, revoke]
+    [file, revoke]
   );
 
   const onOk = useCallback(async () => {
     try {
       const values = (await form.validateFields()) as ICreatePermission;
-      values.fileId = fileId;
+      values.fileId = file.id;
 
       const res = await onSave(values);
       if ('error' in res) {
@@ -95,7 +95,7 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
       console.log('catcherror', error);
       return;
     }
-  }, [fileId, form, onSave]);
+  }, [file, form, onSave]);
 
   return (
     <Modal
@@ -111,6 +111,7 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
       }}
     >
       <Form autoComplete="off" form={form} layout="horizontal">
+        <div className={b('permission-title').toString()}>Выдать права доступа для файла {file.name}:</div>
         <Row gutter={12}>
           <Col span={8}>
             <Form.Item name="emailAddressOrDomain" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
@@ -155,11 +156,13 @@ const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ i
             </Form.Item>
           </Col>
           <Col span={2}>
-            <Button className={b('permission-form').toString()} onClick={onOk} icon={<SendOutlined />} />
+            <Tooltip placement="right" title="Выдать права доступа">
+              <Button className={b('permission-form').toString()} onClick={onOk} icon={<SendOutlined />} />
+            </Tooltip>
           </Col>
         </Row>
       </Form>
-      {filePermissions?.map(permission => (
+      {file.permissions?.map(permission => (
         <Card>
           <div className={b('permission-container').toString()}>
             <div className={b('user-info').toString()}>

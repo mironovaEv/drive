@@ -68,10 +68,9 @@ const FileMenu = ({ setOpen, file }) => {
         }}
       />
       <PermissionModal
-        fileId={file.id}
+        file={file}
         initialValues={initialValues as ICreatePermission}
         onSave={onCreatePermission}
-        filePermissions={file.permissions}
         modal={{
           visible: showPermissionModal,
           setVisible: setShowPermissionModal,
