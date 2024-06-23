@@ -21,7 +21,7 @@ const { Content } = Layout;
 const FilesList: React.FC = () => {
   const navigate = useNavigate();
   const { setConfig } = useLayoutConfig();
-  const { data: dataFiles } = useGetFilesQuery(undefined);
+  const { data: dataFiles } = useGetFilesQuery({ trashed: '' });
   const [checkedToDelete, setCheckedToDelete] = useState<string[]>([]);
 
   const [showCreateRecordModal, setShowCreateRecordModal] = useState(false);

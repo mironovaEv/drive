@@ -8,7 +8,7 @@ export const filesApi = createApi({
   baseQuery: axiosBaseQuery('/api/drive'),
   tagTypes: ['Files', 'Trash', 'Changes', 'Permission'],
   endpoints: builder => ({
-    getFiles: builder.query<IFile[], unknown>({
+    getFiles: builder.query<IFile[], { trashed: string }>({
       query: params => ({
         url: '/files',
         method: 'get',

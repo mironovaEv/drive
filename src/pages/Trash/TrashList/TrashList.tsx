@@ -17,7 +17,7 @@ const { Content } = Layout;
 
 const TrashList: React.FC = () => {
   const { setConfig } = useLayoutConfig();
-  const { data: dataFiles } = useGetFilesQuery(undefined);
+  const { data: dataFiles } = useGetFilesQuery({ trashed: '' });
 
   const [, setTick] = useState(0);
   const forceUpdate = () => setTick(tick => tick + 1);
