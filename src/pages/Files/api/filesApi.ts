@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { IComment, ICreateComment, ICreatePermission, IEditComment, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
+import { IComment, ICreaateReply, ICreateComment, ICreatePermission, IEditComment, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
@@ -126,6 +126,14 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files', 'Comments'],
     }),
+    createReply: builder.mutation<undefined, ICreaateReply>({
+      query: data => ({
+        url: `/files/${data.fileId}/comments/${data.commentId}/replies`,
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files', 'Comments'],
+    }),
   }),
 });
 
@@ -145,4 +153,5 @@ export const {
   useCreateCommentMutation,
   useDeleteCommentMutation,
   useEditCommentMutation,
+  useCreateReplyMutation,
 } = filesApi;
