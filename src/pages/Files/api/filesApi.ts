@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { ICreatePermission, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
+import { IComment, ICreateComment, ICreatePermission, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: axiosBaseQuery('/api/drive'),
-  tagTypes: ['Files', 'Trash', 'Changes', 'Permission'],
+  tagTypes: ['Files', 'Trash', 'Changes', 'Permission', 'Comments'],
   endpoints: builder => ({
     getFiles: builder.query<IFile[], { trashed: string }>({
       query: params => ({
@@ -96,6 +96,28 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files', 'Permission'],
     }),
+    getComments: builder.query<IComment[], string>({
+      query: params => ({
+        url: `/files/${params}/comments`,
+        method: 'get',
+      }),
+      providesTags: ['Files', 'Comments'],
+    }),
+    createComment: builder.mutation<undefined, ICreateComment>({
+      query: data => ({
+        url: `/files/${data.fileId}/comments`,
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files', 'Comments'],
+    }),
+    deleteComment: builder.mutation<undefined, { fileId: string; commentId: string }>({
+      query: params => ({
+        url: `/files/${params.fileId}/comments/${params.commentId}`,
+        method: 'delete',
+      }),
+      invalidatesTags: ['Files', 'Comments'],
+    }),
   }),
 });
 
@@ -111,4 +133,7 @@ export const {
   useUpdatePermissionMutation,
   useAddPermissionMutation,
   useRevokePermissionMutation,
+  useGetCommentsQuery,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
 } = filesApi;

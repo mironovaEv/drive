@@ -1,4 +1,4 @@
-import { ICreatePermission, IFile, IFolder } from './api/types';
+import { IComment, ICreateComment, ICreatePermission, IFile, IFolder } from './api/types';
 import { FileComponentProps } from './components/FileComponent/FileComponent';
 
 export const enum FormMode {
@@ -19,12 +19,21 @@ export interface IViewModalProps {
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
 }
 
-export interface iPermissionModalProps<T> {
+export interface IPermissionModalProps<T> {
   onOpen?: () => Promise<{ data?: IFolder } | { error: unknown }>;
   file: IFile;
   onSave?: (values: T) => Promise<{ data?: ICreatePermission } | { error: unknown }>;
   initialValues?: T;
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
+}
+
+export interface ICommentsModalProps<T> {
+  modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
+  onOpen?: () => Promise<{ data?: IComment } | { error: unknown }>;
+  file: FileComponentProps;
+  onSave?: (values: T) => Promise<{ data?: ICreateComment } | { error: unknown }>;
+  initialValues?: T;
+  isLoadingCreate?: boolean;
 }
 
 export const textFormModeModal = {

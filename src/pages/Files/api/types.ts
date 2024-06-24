@@ -54,3 +54,26 @@ export interface ICreatePermission {
   emailAddressOrDomain: string;
   type: UserEnum;
 }
+
+export interface ICreateComment {
+  fileId: string;
+  content: string;
+}
+export interface ICreaateReply extends ICreateComment {
+  commentId: string;
+}
+
+export interface IComment {
+  id: string;
+  content: string;
+  replies: IComment;
+  author: IUser;
+  createdTime: Date;
+  modifiedTime: Date;
+}
+
+export interface IEditReply extends ICreaateReply {
+  replyId: string;
+}
+
+export interface IEditComment extends ICreaateReply {}

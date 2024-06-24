@@ -112,7 +112,7 @@ const FilesList: React.FC = () => {
               className={b('main-button').toString()}
               icon={<DoubleLeftOutlined style={{ fontSize: 20 }} />}
             ></Button>
-            <Button onClick={() => handleAddFolder} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
+            <Button onClick={() => handleAddFolder()} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
             <Upload multiple {...props} className={b('main-button-upload').toString()}>

@@ -1,0 +1,120 @@
+@use '/src/shared/scss/color'; 
+
+.comments-modal {
+    
+    
+    &__comment-container{
+        overflow:hidden;
+        display: flex;
+        justify-content: space-between;
+    }
+   
+
+    &__info  {
+        box-sizing:border-box;
+        width:auto;
+        max-width:100%;
+        margin: auto 15px auto 10px;
+        
+    }
+
+    &__info-name {
+        font-size: 18px;
+        font-weight: 500;
+           
+    }
+    &__info-date {
+        display: flex;
+        
+           
+    }
+
+    &__info-created-date {
+        margin-left: 8px;
+        margin-top: 3px;
+        
+        
+        
+           
+    }
+    &__user-info{
+        display: flex;
+    }
+
+    &__content  {
+        word-break: break-all;
+        
+        font-size: 18px;
+        margin-top: 2px;
+    }
+    &__comment-btn-container{
+        max-width: min-content;
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+     
+    }
+
+    &__comment-icon-btn-container{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 4px;
+    }
+    &__comment-icon-btn{
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        margin-left: 2px;
+    }
+    &__comment-delete-btn{
+        margin-top: 5px;
+        cursor: pointer;
+        margin-right: 6px;
+        border: 0;
+        padding: 0;
+        background: white;
+        color: color.$primary;
+    }
+    &__reply-btn{
+        cursor: pointer;
+        border: 0;
+        padding-right: 0;
+        background: white;
+        color: color.$primary;
+        
+    }
+    &__comment-input{
+    margin-left: 5px;
+    }
+    &__send-btn{
+        margin-left: 10px;
+        }
+       
+   
+    
+}
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+.ant-descriptions-item {
+    padding: 1px !important;
+    margin: 0;
+    display: block;
+    
+}
+
+.ant-descriptions-item-content {
+    font-size: 16px;
+    display: block;
+}
+
+.ant-descriptions-item-label, .ant-form-item-label > label {
+    font-size: 15px !important;
+    font-weight:500
+}
+

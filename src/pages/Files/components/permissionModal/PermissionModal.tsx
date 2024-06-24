@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Avatar, Button, Card, Col, Form, Input, Modal, Row, Select, Tooltip } from 'antd';
 import block from 'bem-cn';
-import { iPermissionModalProps } from '../../types';
+import { IPermissionModalProps } from '../../types';
 
 import './PermissionModal.scss';
 import { RoleEnum, RoleEnumRus, UserEnum, UserEnumRus } from './types';
@@ -13,7 +13,7 @@ import eventEmitter from '../../../../shared/helpers/eventEmmiter';
 
 const b = block('permission-modal');
 
-const PermissionModal: React.FC<iPermissionModalProps<ICreatePermission>> = ({ initialValues, onSave, modal, file }) => {
+const PermissionModal: React.FC<IPermissionModalProps<ICreatePermission>> = ({ initialValues, onSave, modal, file }) => {
   const { visible, setVisible } = modal;
   const [form] = Form.useForm();
 
