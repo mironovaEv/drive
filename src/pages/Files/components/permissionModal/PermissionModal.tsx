@@ -184,7 +184,7 @@ const PermissionModal: React.FC<IPermissionModalProps<ICreatePermission>> = ({ i
                 <div>
                   <Select
                     style={{ width: 150 }}
-                    defaultValue={permission.role}
+                    defaultValue={RoleEnumRus[permission.role]}
                     onChange={(value: string) => {
                       onChangeRole(permission.id, value);
                     }}

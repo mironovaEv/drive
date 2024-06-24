@@ -8,7 +8,7 @@ export const enum FormMode {
 export interface IModalProps<T, K> {
   isLoading?: boolean;
   initialValues?: T;
-  onSave?: (values: T) => Promise<{ data?: IFolder } | { error: unknown }>;
+  onSave: (values: T) => Promise<{ data?: IFolder } | { error: unknown }>;
   formMode?: K;
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
 }
@@ -23,7 +23,7 @@ export interface IPermissionModalProps<T> {
   isLoading?: boolean;
   onOpen?: () => Promise<{ data?: IFolder } | { error: unknown }>;
   file: FileComponentProps;
-  onSave?: (values: T) => Promise<{ data?: ICreatePermission } | { error: unknown }>;
+  onSave: (values: T) => Promise<{ data?: ICreatePermission } | { error: unknown }>;
   initialValues?: T;
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
 }
@@ -32,7 +32,7 @@ export interface ICommentsModalProps<T> {
   modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
   onOpen?: () => Promise<{ data?: IComment } | { error: unknown }>;
   file: FileComponentProps;
-  onSave?: (values: T) => Promise<{ data?: ICreateComment } | { error: unknown }>;
+  onSave: (values: T) => Promise<{ data?: ICreateComment } | { error: unknown }>;
   initialValues?: T;
   isLoadingCreate?: boolean;
 }

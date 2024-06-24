@@ -56,7 +56,7 @@ const FileMenu = ({ setOpen, fileItem }: FileMenuProps) => {
         return;
       }
     },
-    [updateFile]
+    [setOpen, updateFile]
   );
 
   const handleUpdateFile = ({ file }) => {
