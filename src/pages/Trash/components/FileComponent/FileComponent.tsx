@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Checkbox, Tooltip } from 'antd';
+import { Card, Checkbox, Tooltip } from 'antd';
 
 const { Meta } = Card;
 import './fileComponent.scss';
@@ -12,8 +12,6 @@ import { VideoIcon } from '../../../../shared/img/files/Video';
 import { DefaultIcon } from '../../../../shared/img/files/Default';
 import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useFormatBytes';
 import { TextIcon } from '../../../../shared/img/files/Text';
-
-import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { useState } from 'react';
 
 type FileComponentProps = {
@@ -48,9 +46,6 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-            </div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -64,11 +59,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-              </div>
-            </div>
+            <div></div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -82,11 +73,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-              </div>
-            </div>
+            <div></div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -100,11 +87,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-              </div>
-            </div>
+            <div></div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -118,11 +101,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-              </div>
-            </div>
+            <div></div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />
@@ -136,11 +115,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
             </div>
-            <div>
-              <div>
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
-              </div>
-            </div>
+            <div></div>
           </div>
           <Tooltip placement="right" title={file.name}>
             <Meta title={file.name} description={size} />

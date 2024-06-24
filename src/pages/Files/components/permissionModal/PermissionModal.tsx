@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Avatar, Button, Card, Col, Form, Input, Modal, Row, Select, Tooltip } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, Modal, Row, Select, Spin, Tooltip } from 'antd';
 import block from 'bem-cn';
 import { IPermissionModalProps } from '../../types';
 
@@ -13,7 +13,7 @@ import eventEmitter from '../../../../shared/helpers/eventEmmiter';
 
 const b = block('permission-modal');
 
-const PermissionModal: React.FC<IPermissionModalProps<ICreatePermission>> = ({ initialValues, onSave, modal, file }) => {
+const PermissionModal: React.FC<IPermissionModalProps<ICreatePermission>> = ({ initialValues, isLoading, onSave, modal, file }) => {
   const { visible, setVisible } = modal;
   const [form] = Form.useForm();
 
@@ -110,58 +110,60 @@ const PermissionModal: React.FC<IPermissionModalProps<ICreatePermission>> = ({ i
         form.resetFields();
       }}
     >
-      <Form autoComplete="off" form={form} layout="horizontal">
-        <div className={b('permission-title').toString()}>Выдать права доступа для файла {file.name}:</div>
-        <Row gutter={12}>
-          <Col span={8}>
-            <Form.Item name="emailAddressOrDomain" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
-              <Input className={b('permission-form-input').toString()} placeholder="Введите email или домен" />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item name="role" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
-              <Select
-                className={b('permission-select').toString()}
-                onChange={(value: string) => {
-                  setNewRoleParams({
-                    role: value,
-                  });
-                }}
-                options={[
-                  { value: RoleEnum.writer, label: RoleEnumRus[RoleEnum.writer] },
-                  { value: RoleEnum.commenter, label: RoleEnumRus[RoleEnum.commenter] },
-                  { value: RoleEnum.reader, label: RoleEnumRus[RoleEnum.reader] },
-                ]}
-                placeholder="Выберите роль"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item name="type" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
-              <Select
-                className={b('permission-select').toString()}
-                onChange={(value: string) => {
-                  setUserTypeParams({
-                    type: value,
-                  });
-                }}
-                options={[
-                  { value: UserEnum.user, label: UserEnumRus[UserEnum.user] },
-                  { value: UserEnum.group, label: UserEnumRus[UserEnum.group] },
-                  { value: UserEnum.domain, label: UserEnumRus[UserEnum.domain] },
-                  { value: UserEnum.anyone, label: UserEnumRus[UserEnum.anyone] },
-                ]}
-                placeholder="Выберите тип"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={2}>
-            <Tooltip placement="right" title="Выдать права доступа">
-              <Button className={b('permission-form').toString()} onClick={onOk} icon={<SendOutlined />} />
-            </Tooltip>
-          </Col>
-        </Row>
-      </Form>
+      <Spin spinning={isLoading}>
+        <Form autoComplete="off" form={form} layout="horizontal">
+          <div className={b('permission-title').toString()}>Выдать права доступа для файла {file.name}:</div>
+          <Row gutter={12}>
+            <Col span={8}>
+              <Form.Item name="emailAddressOrDomain" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
+                <Input className={b('permission-form-input').toString()} placeholder="Введите email или домен" />
+              </Form.Item>
+            </Col>
+            <Col span={7}>
+              <Form.Item name="role" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
+                <Select
+                  className={b('permission-select').toString()}
+                  onChange={(value: string) => {
+                    setNewRoleParams({
+                      role: value,
+                    });
+                  }}
+                  options={[
+                    { value: RoleEnum.writer, label: RoleEnumRus[RoleEnum.writer] },
+                    { value: RoleEnum.commenter, label: RoleEnumRus[RoleEnum.commenter] },
+                    { value: RoleEnum.reader, label: RoleEnumRus[RoleEnum.reader] },
+                  ]}
+                  placeholder="Выберите роль"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={7}>
+              <Form.Item name="type" rules={[{ required: true, message: 'Пожалуйста, укажите значение' }]}>
+                <Select
+                  className={b('permission-select').toString()}
+                  onChange={(value: string) => {
+                    setUserTypeParams({
+                      type: value,
+                    });
+                  }}
+                  options={[
+                    { value: UserEnum.user, label: UserEnumRus[UserEnum.user] },
+                    { value: UserEnum.group, label: UserEnumRus[UserEnum.group] },
+                    { value: UserEnum.domain, label: UserEnumRus[UserEnum.domain] },
+                    { value: UserEnum.anyone, label: UserEnumRus[UserEnum.anyone] },
+                  ]}
+                  placeholder="Выберите тип"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={2}>
+              <Tooltip placement="right" title="Выдать права доступа">
+                <Button className={b('permission-form').toString()} onClick={onOk} icon={<SendOutlined />} />
+              </Tooltip>
+            </Col>
+          </Row>
+        </Form>
+      </Spin>
       {file.permissions?.map(permission => (
         <Card>
           <div className={b('permission-container').toString()}>

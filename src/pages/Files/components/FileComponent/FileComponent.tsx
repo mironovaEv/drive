@@ -81,7 +81,7 @@ const FileComponent = (file: FileComponentProps) => {
             <div>
               <Popover
                 className="popover-menu"
-                content={<FileMenu setOpen={setOpen} file={file} />}
+                content={<FileMenu setOpen={setOpen} fileItem={file} />}
                 placement="rightTop"
                 showArrow={false}
                 trigger="click"
@@ -108,7 +108,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} file={file} />}
+                  content={<FileMenu setOpen={setOpen} fileItem={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -139,7 +139,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} file={file} />}
+                  content={<FileMenu setOpen={setOpen} fileItem={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -170,7 +170,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} file={file} />}
+                  content={<FileMenu setOpen={setOpen} fileItem={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -201,7 +201,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} file={file} />}
+                  content={<FileMenu setOpen={setOpen} fileItem={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"
@@ -232,7 +232,7 @@ const FileComponent = (file: FileComponentProps) => {
               <div>
                 <Popover
                   className="popover-menu"
-                  content={<FileMenu setOpen={setOpen} file={file} />}
+                  content={<FileMenu setOpen={setOpen} fileItem={file} />}
                   placement="rightTop"
                   showArrow={false}
                   trigger="click"

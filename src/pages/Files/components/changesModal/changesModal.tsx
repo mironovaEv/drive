@@ -24,7 +24,7 @@ const ChangesModal: React.FC<IViewModalProps> = ({ modal, file }) => {
   const { visible, setVisible } = modal;
 
   const { data: dataChanges } = useGetChangesQuery(file.id, { skip: file.type.includes('folder') });
-
+  console.log(dataChanges);
   return (
     <Modal
       centered

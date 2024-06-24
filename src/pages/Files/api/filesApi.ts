@@ -161,6 +161,17 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files', 'Comments'],
     }),
+    updateFile: builder.mutation<undefined, { fileId: string; file: FormData }>({
+      query: data => ({
+        url: `/files/update/${data.fileId}`,
+        method: 'put',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
@@ -183,4 +194,5 @@ export const {
   useCreateReplyMutation,
   useEditReplyMutation,
   useDeleteReplyMutation,
+  useUpdateFileMutation,
 } = filesApi;
