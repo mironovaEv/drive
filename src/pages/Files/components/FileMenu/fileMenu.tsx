@@ -65,7 +65,7 @@ const FileMenu = ({ setOpen, file }) => {
           </div>
           <div>
             <button
-              className="menu-button"
+              className={`menu-button ${file.type?.includes('folder') ? 'noVis' : ''}`}
               onClick={e => {
                 e.stopPropagation();
                 setOpen(false);

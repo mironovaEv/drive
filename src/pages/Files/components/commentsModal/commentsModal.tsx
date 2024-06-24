@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Input, Modal, Row, Spin, Tooltip } from 'antd';
 import block from 'bem-cn';
 
@@ -78,7 +78,7 @@ const CommentsModal: React.FC<ICommentsModalProps<ICreateComment>> = ({ initialV
         </Row>
       </Form>
       {comments?.map(comment => (
-        <CommentItem comment={comment} file={file} />
+        <CommentItem visible={visible} initialValues={comment.content} comment={comment} file={file} />
       ))}
     </Modal>
   );
