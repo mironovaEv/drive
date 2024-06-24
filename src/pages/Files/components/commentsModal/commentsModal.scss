@@ -5,6 +5,10 @@
     &__comment-card{
         margin-top: 4px ;
     }
+    &__reply-card{
+        margin-left: 50px;
+        margin-top: 4px ;
+    }
     
     
     &__comment-container{
@@ -106,8 +110,19 @@
 
     &__edit-comment-input{
         min-width: 485px;
+        max-width: 485px;
         margin-bottom: 0
         
+    }
+    &__edit-reply-input{
+        min-width: 435px;
+        max-width: 435px;
+        margin-bottom: 0
+        
+    }
+
+    &__reply-btns{
+        display: flex;
     }
 
    

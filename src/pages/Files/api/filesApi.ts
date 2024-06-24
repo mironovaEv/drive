@@ -1,7 +1,19 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { axiosBaseQuery } from '../../../shared/api/query';
-import { IComment, ICreaateReply, ICreateComment, ICreatePermission, IEditComment, IEditPermission, IFile, IFolder, IRevision, IRootDir } from './types';
+import {
+  IComment,
+  ICreaateReply,
+  ICreateComment,
+  ICreatePermission,
+  IEditComment,
+  IEditPermission,
+  IEditReply,
+  IFile,
+  IFolder,
+  IRevision,
+  IRootDir,
+} from './types';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
@@ -134,6 +146,21 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files', 'Comments'],
     }),
+    editReply: builder.mutation<undefined, IEditReply>({
+      query: data => ({
+        url: `/files/${data.fileId}/comments/${data.commentId}/replies/${data.replyId}`,
+        method: 'put',
+        data,
+      }),
+      invalidatesTags: ['Files', 'Comments'],
+    }),
+    deleteReply: builder.mutation<undefined, { fileId: string; commentId: string; replyId: string }>({
+      query: params => ({
+        url: `/files/${params.fileId}/comments/${params.commentId}/replies/${params.replyId}`,
+        method: 'delete',
+      }),
+      invalidatesTags: ['Files', 'Comments'],
+    }),
   }),
 });
 
@@ -154,4 +181,6 @@ export const {
   useDeleteCommentMutation,
   useEditCommentMutation,
   useCreateReplyMutation,
+  useEditReplyMutation,
+  useDeleteReplyMutation,
 } = filesApi;

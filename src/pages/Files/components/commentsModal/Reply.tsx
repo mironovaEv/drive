@@ -1,15 +1,14 @@
-import { Avatar, Button, Card, Col, Form, Input, Popover, Row, Spin, Tooltip, Typography } from 'antd';
-import { IComment, ICreaateReply } from '../../api/types';
+import { Avatar, Button, Card, Form, Input, Popover, Spin, Typography } from 'antd';
+import { IComment, IEditReply } from '../../api/types';
 import block from 'bem-cn';
 import moment from 'moment';
-import { DeleteOutlined, EditOutlined, SendOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
 
 import './commentsModal.scss';
 import eventEmitter from '../../../../shared/helpers/eventEmmiter';
-import { useCreateReplyMutation, useDeleteCommentMutation, useEditCommentMutation } from '../../api/filesApi';
+import { useDeleteReplyMutation, useEditReplyMutation } from '../../api/filesApi';
 import { FileComponentProps } from '../FileComponent/FileComponent';
-import Reply from './Reply';
 
 const b = block('comments-modal');
 
@@ -24,19 +23,16 @@ type CommentItemProps = {
   file: FileComponentProps;
   visible: boolean;
   initialValues: string;
+  reply: IComment;
 };
 
-const CommentItem = ({ comment, file, visible, initialValues }: CommentItemProps) => {
-  console.log(comment);
+const CommentItem = ({ comment, reply, file, visible, initialValues }: CommentItemProps) => {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [form] = Form.useForm();
-  const [replyForm] = Form.useForm();
-  const [openReply, setOpenReply] = useState(false);
 
-  const [deleteComment, { isLoading: isLoadingDelete }] = useDeleteCommentMutation();
-  const [editComment, { isLoading: isLoadingEdit }] = useEditCommentMutation();
-  const [createReply, { isLoading: isLoadingCreate }] = useCreateReplyMutation();
+  const [deleteReply, { isLoading: isLoadingDelete }] = useDeleteReplyMutation();
+  const [editReply, { isLoading: isLoadingEdit }] = useEditReplyMutation();
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -49,97 +45,75 @@ const CommentItem = ({ comment, file, visible, initialValues }: CommentItemProps
     }
   }, [form, initialValues, openEdit, visible]);
 
-  const onDeleteComment = useCallback(async () => {
+  const onDeleteReply = useCallback(async () => {
     try {
-      const res = await deleteComment({ fileId: file.id, commentId: comment.id });
+      const res = await deleteReply({ fileId: file.id, commentId: comment.id, replyId: reply.id });
       if ('error' in res) {
         console.log('error');
         return;
       } else {
         setOpen(false);
 
-        eventEmitter.emit('customMessage', 'success', 'Комментарий удален');
+        eventEmitter.emit('customMessage', 'success', 'Ответ удален');
       }
     } catch (error) {
       console.log('catcherror', error);
       return;
     }
-  }, [comment.id, deleteComment, file.id]);
+  }, [comment.id, deleteReply, file.id, reply.id]);
 
-  const onEditComment = useCallback(async () => {
+  const onEditReply = useCallback(async () => {
     try {
-      const values = (await form.validateFields()) as { content: string };
-      console.log(values);
-      const res = await editComment({ fileId: file.id, commentId: comment.id, content: values.content });
+      const values = (await form.validateFields()) as IEditReply;
+      values.fileId = file.id;
+      values.commentId = comment.id;
+      values.replyId = reply.id;
+      const res = await editReply(values);
       if ('error' in res) {
         console.log('error');
         return;
       } else {
         setOpenEdit(false);
-        eventEmitter.emit('customMessage', 'success', 'Комментарий отредактирован');
+        eventEmitter.emit('customMessage', 'success', 'Ответ отредактирован');
       }
     } catch (error) {
       console.log('catcherror', error);
       return;
     }
-  }, [comment.id, editComment, file.id, form]);
-
-  const onOk = useCallback(async () => {
-    try {
-      const values = (await replyForm.validateFields()) as ICreaateReply;
-      if (values.content == null || values.content == '') {
-        return;
-      }
-      values.fileId = file.id;
-      values.commentId = comment.id;
-
-      const res = await createReply(values);
-      if ('error' in res) {
-        console.log('error');
-        return;
-      } else {
-        eventEmitter.emit('customMessage', 'success', 'Ответ отправлен');
-        setOpenReply(false);
-        replyForm.resetFields();
-      }
-    } catch (error) {
-      console.log('catcherror', error);
-      return;
-    }
-  }, [replyForm, file.id, comment.id, createReply]);
+  }, [comment.id, editReply, file.id, form, reply.id]);
 
   return (
     <div>
-      <Card className={b('comment-card').toString()}>
+      <Card className={b('reply-card').toString()}>
         <div className={b('comment-container').toString()}>
           <div className={b('user-info').toString()}>
             <div>
-              <Avatar className={b('avatar').toString()} shape="square" src={<img src={comment?.author.photoLink} alt="avatar" />} size={40}></Avatar>
+              <Avatar className={b('avatar').toString()} shape="square" src={<img src={reply?.author.photoLink} alt="avatar" />} size={40}></Avatar>
             </div>
 
             <div className={b('info').toString()}>
               <div className={b('info-date').toString()}>
-                <div className={b('info-name').toString()}>{comment?.author?.displayName}</div>
+                <div className={b('info-name').toString()}>{reply?.author?.displayName}</div>
                 <Text type="secondary" className={b('info-created-date').toString()}>
-                  {getmodifiedTime(comment.createdTime)}
+                  {getmodifiedTime(reply.createdTime)}
                 </Text>
                 <Text type="secondary" className={b('info-created-date').toString()}>
-                  {comment.createdTime !== comment.modifiedTime ? `(изменено ${getmodifiedTime(comment.modifiedTime)})` : ''}
+                  {reply.createdTime !== reply.modifiedTime ? `(изменено ${getmodifiedTime(reply.modifiedTime)})` : ''}
                 </Text>
               </div>
               {!openEdit ? (
-                <div className={b('content').toString()}>{comment?.content}</div>
+                <div className={b('content').toString()}>{reply?.content}</div>
               ) : (
                 <div>
                   <Form autoComplete="off" form={form} layout="horizontal">
                     <Spin spinning={isLoadingEdit}>
                       <div>
                         <Form.Item name="content" rules={[{ required: true, message: 'Поле не может быть пустым' }]}>
-                          <Input className={b('edit-comment-input').toString()} placeholder="Напишите комментарий" />
+                          <Input className={b('edit-reply-input').toString()} placeholder="Напишите ответ" />
                         </Form.Item>
                       </div>
                       <div>
-                        <button onClick={onEditComment} className={b('comment-edit-btn').toString()}>
+                        <button onClick={onEditReply} className={b('comment-edit-btn').toString()}>
                           Редактировать
                         </button>
                         <button
@@ -159,7 +133,7 @@ const CommentItem = ({ comment, file, visible, initialValues }: CommentItemProps
           </div>
           <div className={b('comment-btn-container').toString()}>
             <div className={b('comment-icon-btn-container').toString()}>
-              {comment.author.me ? (
+              {reply.author.me ? (
                 <div className={b('reply-btns').toString()}>
                   <Button
                     onClick={() => {
@@ -171,8 +145,8 @@ const CommentItem = ({ comment, file, visible, initialValues }: CommentItemProps
                   <Popover
                     content={
                       <Spin spinning={isLoadingDelete}>
-                        <div>Вы точно хотите удалить комментарий?</div>
-                        <button onClick={onDeleteComment} className={b('comment-delete-btn').toString()}>
+                        <div>Вы точно хотите удалить ответ?</div>
+                        <button onClick={onDeleteReply} className={b('comment-delete-btn').toString()}>
                           Удалить
                         </button>
                         <button
@@ -194,43 +168,9 @@ const CommentItem = ({ comment, file, visible, initialValues }: CommentItemProps
                 </div>
               ) : null}
             </div>
-
-            <div>
-              <button
-                onClick={() => {
-                  setOpenReply(!openReply);
-                  replyForm.resetFields();
-                }}
-                className={b('reply-btn').toString()}
-              >
-                {openReply ? 'Отмена' : 'Ответить'}
-              </button>
-            </div>
           </div>
         </div>
       </Card>
-      {openReply ? (
-        <Form autoComplete="off" form={replyForm} layout="horizontal">
-          <Row gutter={12}>
-            <Col span={22}>
-              <Spin spinning={isLoadingCreate}>
-                <Form.Item name="content">
-                  <Input className={b('comment-input').toString()} placeholder="Напишите ответ" />
-                </Form.Item>
-              </Spin>
-            </Col>
-
-            <Col span={1}>
-              <Tooltip placement="right" title="Отправить ответ">
-                <Button className={b('send-btn').toString()} onClick={onOk} icon={<SendOutlined />} />
-              </Tooltip>
-            </Col>
-          </Row>
-        </Form>
-      ) : null}
-      {comment.replies?.map(reply => (
-        <Reply visible={visible} initialValues={reply.content} comment={comment} reply={reply} file={file} />
-      ))}
     </div>
   );
 };

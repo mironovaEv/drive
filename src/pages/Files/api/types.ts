@@ -66,7 +66,7 @@ export interface ICreaateReply extends ICreateComment {
 export interface IComment {
   id: string;
   content: string;
-  replies: IComment;
+  replies: IComment[];
   author: IUser;
   createdTime: Date;
   modifiedTime: Date;
