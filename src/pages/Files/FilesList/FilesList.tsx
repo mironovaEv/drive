@@ -8,12 +8,22 @@ import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
 import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
-import { useCreateFolderMutation, useDeleteFilesMutation, useGetDirQuery, useGetFilesQuery, useGetRootDirQuery } from '../api/filesApi';
+import {
+  useCreateFolderMutation,
+  useDeleteCompletelyMutation,
+  useDeleteFilesMutation,
+  useGetDirQuery,
+  useGetFilesQuery,
+  useGetRootDirQuery,
+  useUploadFileMutation,
+} from '../api/filesApi';
 import { FormMode } from '../types';
 import { IFolder } from '../api/types';
 import { useNavigate } from 'react-router-dom';
 import CreateRecordModal from '../components/createFolderModal/createFolder';
 import { useGetFolderId } from '../../../shared/hooks/useGetFolderId/useGetFolderId';
+import eventEmitter from '../../../shared/helpers/eventEmmiter';
+import DeleteModal from '../components/deleteCompletelyModal/deleteCompletelyModal';
 
 const b = block('files-list');
 const { Content } = Layout;
@@ -28,8 +38,12 @@ const FilesList: React.FC = () => {
   const [formCreateRecordMode, setFormCreateRecordMode] = useState<FormMode>(FormMode.Create);
   const [initialValues, setInitialValues] = useState<IFolder | object>({});
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
   const [deleteFiles, { isLoading: isLoadingDelete }] = useDeleteFilesMutation();
+  const [deleteCompletely, { isLoading: isLoadingDeleteCompletely }] = useDeleteCompletelyMutation();
+  const [uploadFile, { isLoading: isLoadingUpload }] = useUploadFileMutation();
   const folderId = useGetFolderId();
 
   const isDisabled = folderId === useGetRootDirQuery({}).data?.id ? true : false;
@@ -60,20 +74,48 @@ const FilesList: React.FC = () => {
     return result;
   }, [checkedToDelete, deleteFiles]);
 
-  const props: UploadProps = {
-    name: 'files',
-    action: 'http://localhost:8080/api/drive/files/upload?targetFolderId=' + folderId,
+  const onDeleteCompletely = useCallback(async () => {
+    const result = checkedToDelete.length > 0 ? await deleteCompletely(checkedToDelete) : null;
+    setCheckedToDelete([]);
 
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
+    return result;
+  }, [checkedToDelete, deleteCompletely]);
+
+  // const props: UploadProps = {
+  //   name: 'files',
+  //   action: 'http://localhost:8080/api/drive/files/upload?targetFolderId=' + folderId,
+
+  //   onChange(info) {
+  //     if (info.file.status !== 'uploading') {
+  //       console.log(info.file, info.fileList);
+  //     }
+  //     if (info.file.status === 'done') {
+  //       message.success(`${info.file.name} file uploaded successfully`);
+  //     } else if (info.file.status === 'error') {
+  //       message.error(`${info.file.name} file upload failed.`);
+  //     }
+  //   },
+  // };
+  const onUploadFile = useCallback(
+    async (values: { targetFolderId: string; files: FormData }) => {
+      try {
+        const res = await uploadFile(values);
+        if ('error' in res) {
+          console.log('error');
+          return;
+        } else {
+          eventEmitter.emit('customMessage', 'success', 'Файлы успешно загружены');
+        }
+      } catch (error) {
+        console.log('catcherror', error);
+        return;
       }
     },
+    [uploadFile]
+  );
+
+  const handleUploadFiles = ({ file }) => {
+    onUploadFile({ targetFolderId: folderId, files: file });
   };
 
   const goParent = useCallback(
@@ -115,7 +157,7 @@ const FilesList: React.FC = () => {
             <Button onClick={() => handleAddFolder()} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
-            <Upload multiple {...props} className={b('main-button-upload').toString()}>
+            <Upload multiple customRequest={handleUploadFiles} className={b('main-button-upload').toString()}>
               <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 20 }} />}>
                 <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
@@ -127,6 +169,17 @@ const FilesList: React.FC = () => {
               icon={<DeleteOutlined style={{ fontSize: 20 }} />}
             >
               <div className={b('main-button-text').toString()}>Отправить в корзину</div>
+            </Button>
+            <Button
+              disabled={isLoadingDelete}
+              onClick={e => {
+                e.stopPropagation;
+                setShowDeleteModal(true);
+              }}
+              className={b('main-button').toString()}
+              icon={<DeleteOutlined style={{ fontSize: 20 }} />}
+            >
+              <div className={b('main-button-text').toString()}>Удалить</div>
             </Button>
           </div>
         </div>
@@ -156,6 +209,14 @@ const FilesList: React.FC = () => {
         isLoading={isLoadingCreate}
         modal={{ visible: showCreateRecordModal, setVisible: setShowCreateRecordModal }}
         onSave={onCreateFolder}
+      />
+      <DeleteModal
+        isLoading={isLoadingDeleteCompletely}
+        modal={{
+          visible: showDeleteModal,
+          setVisible: setShowDeleteModal,
+        }}
+        onSave={onDeleteCompletely}
       />
     </div>
   );

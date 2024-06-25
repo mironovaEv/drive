@@ -81,7 +81,7 @@ export const filesApi = createApi({
         method: 'get',
         params,
       }),
-      providesTags: ['Files', 'Changes'],
+      providesTags: ['Changes'],
     }),
     updatePermission: builder.mutation<undefined, IEditPermission>({
       query: data => ({
@@ -172,6 +172,25 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
+    uploadFile: builder.mutation<undefined, { targetFolderId: string; files: FormData }>({
+      query: params => ({
+        url: `/files/upload`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        params,
+      }),
+      invalidatesTags: ['Files'],
+    }),
+    deleteCompletely: builder.mutation<undefined, string[]>({
+      query: data => ({
+        url: `/files/delete`,
+        method: 'post',
+        data,
+      }),
+      invalidatesTags: ['Files'],
+    }),
   }),
 });
 
@@ -195,4 +214,6 @@ export const {
   useEditReplyMutation,
   useDeleteReplyMutation,
   useUpdateFileMutation,
+  useUploadFileMutation,
+  useDeleteCompletelyMutation,
 } = filesApi;

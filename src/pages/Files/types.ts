@@ -37,6 +37,12 @@ export interface ICommentsModalProps<T> {
   isLoadingCreate?: boolean;
 }
 
+export interface IDeleteModalProps {
+  modal: { visible: boolean; setVisible: React.Dispatch<React.SetStateAction<boolean>> };
+  onSave: () => Promise<{ data?: undefined } | { error: unknown }>;
+  isLoading?: boolean;
+}
+
 export const textFormModeModal = {
   [FormMode.Create]: 'Создать папку',
 };
