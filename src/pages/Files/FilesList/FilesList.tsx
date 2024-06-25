@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useCallback, useEffect, useState } from 'react';
-import { Button, Layout, Upload, UploadProps, message } from 'antd';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { Button, Layout, Space, Typography, Upload, UploadProps, message } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
+import { ReactReduxContext } from 'react-redux';
 import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
 import MainHeader from '../../../features/MainHeader/MainHeader';
 import './FilesList.scss';
-import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FolderOutlined, CloudUploadOutlined, DoubleLeftOutlined, DeleteOutlined, FileOutlined } from '@ant-design/icons';
 import FileComponent from '../components/FileComponent/FileComponent';
 import {
   useCreateFolderMutation,
@@ -16,6 +17,7 @@ import {
   useGetFilesQuery,
   useGetRootDirQuery,
   useUploadFileMutation,
+  useUploadMutation,
 } from '../api/filesApi';
 import { FormMode } from '../types';
 import { IFolder } from '../api/types';
@@ -24,6 +26,9 @@ import CreateRecordModal from '../components/createFolderModal/createFolder';
 import { useGetFolderId } from '../../../shared/hooks/useGetFolderId/useGetFolderId';
 import eventEmitter from '../../../shared/helpers/eventEmmiter';
 import DeleteModal from '../components/deleteCompletelyModal/deleteCompletelyModal';
+import axios from 'axios';
+import { setUploadProgress } from '../../../redux/reducers/globalSlice';
+import { useAppSelector } from '../../../redux/hooks';
 
 const b = block('files-list');
 const { Content } = Layout;
@@ -31,8 +36,9 @@ const { Content } = Layout;
 const FilesList: React.FC = () => {
   const navigate = useNavigate();
   const { setConfig } = useLayoutConfig();
-  const { data: dataFiles } = useGetFilesQuery({ trashed: '' });
+  const { data: dataFiles, isLoading: isLoading } = useGetFilesQuery({ trashed: '' });
   const [checkedToDelete, setCheckedToDelete] = useState<string[]>([]);
+  const [uploadPost, { isLoading: isLoadingUpload }] = useUploadMutation();
 
   const [showCreateRecordModal, setShowCreateRecordModal] = useState(false);
   const [formCreateRecordMode, setFormCreateRecordMode] = useState<FormMode>(FormMode.Create);
@@ -43,7 +49,6 @@ const FilesList: React.FC = () => {
   const [create, { isLoading: isLoadingCreate }] = useCreateFolderMutation();
   const [deleteFiles, { isLoading: isLoadingDelete }] = useDeleteFilesMutation();
   const [deleteCompletely, { isLoading: isLoadingDeleteCompletely }] = useDeleteCompletelyMutation();
-  const [uploadFile, { isLoading: isLoadingUpload }] = useUploadFileMutation();
   const folderId = useGetFolderId();
 
   const isDisabled = folderId === useGetRootDirQuery({}).data?.id ? true : false;
@@ -81,41 +86,17 @@ const FilesList: React.FC = () => {
     return result;
   }, [checkedToDelete, deleteCompletely]);
 
-  // const props: UploadProps = {
-  //   name: 'files',
-  //   action: 'http://localhost:8080/api/drive/files/upload?targetFolderId=' + folderId,
-
-  //   onChange(info) {
-  //     if (info.file.status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (info.file.status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully`);
-  //     } else if (info.file.status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  // };
-  const onUploadFile = useCallback(
-    async (values: { targetFolderId: string; files: FormData }) => {
-      try {
-        const res = await uploadFile(values);
-        if ('error' in res) {
-          console.log('error');
-          return;
-        } else {
-          eventEmitter.emit('customMessage', 'success', 'Файлы успешно загружены');
-        }
-      } catch (error) {
-        console.log('catcherror', error);
-        return;
-      }
-    },
-    [uploadFile]
-  );
-
   const handleUploadFiles = ({ file }) => {
-    onUploadFile({ targetFolderId: folderId, files: file });
+    try {
+      const response = uploadPost({
+        //endpoint
+        method: 'post', // post, put, patch, delete
+        data: { targetFolderId: folderId, file: file }, //your data to send to your backend
+        setUploadProgress: setUploadProgress, //a function update upload progress
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const goParent = useCallback(
@@ -157,11 +138,13 @@ const FilesList: React.FC = () => {
             <Button onClick={() => handleAddFolder()} className={b('main-button').toString()} icon={<FolderOutlined style={{ fontSize: 20 }} />}>
               <div className={b('main-button-text').toString()}>Создать папку</div>
             </Button>
-            <Upload multiple customRequest={handleUploadFiles} className={b('main-button-upload').toString()}>
-              <Button className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 20 }} />}>
+
+            <Upload showUploadList={false} multiple customRequest={handleUploadFiles} className={b('main-button-upload').toString()}>
+              <Button disabled={isLoadingUpload} className={b('main-button').toString()} icon={<CloudUploadOutlined style={{ fontSize: 20 }} />}>
                 <div className={b('main-button-text').toString()}>Загрузить</div>
               </Button>
             </Upload>
+
             <Button
               disabled={isLoadingDelete}
               onClick={onDeleteFiles}
@@ -171,7 +154,7 @@ const FilesList: React.FC = () => {
               <div className={b('main-button-text').toString()}>Отправить в корзину</div>
             </Button>
             <Button
-              disabled={isLoadingDelete}
+              disabled={isLoadingDeleteCompletely}
               onClick={e => {
                 e.stopPropagation;
                 setShowDeleteModal(true);

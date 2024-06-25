@@ -14,6 +14,8 @@ import {
   IRevision,
   IRootDir,
 } from './types';
+import axios from 'axios';
+import { setUploadProgress } from '../../../redux/reducers/globalSlice';
 
 export const filesApi = createApi({
   reducerPath: 'filesApi',
@@ -172,15 +174,43 @@ export const filesApi = createApi({
       }),
       invalidatesTags: ['Files'],
     }),
-    uploadFile: builder.mutation<undefined, { targetFolderId: string; files: FormData }>({
-      query: params => ({
+    uploadFile: builder.mutation<undefined, { targetFolderId: string; file: FormData }>({
+      query: data => ({
         url: `/files/upload`,
         method: 'post',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        params,
+        data,
       }),
+      invalidatesTags: ['Files'],
+    }),
+    upload: builder.mutation({
+      queryFn: async ({ data }, api) => {
+        try {
+          const result = await axios.post('http://localhost:8080/api/drive/files/upload', data, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+            onUploadProgress: upload => {
+              console.log(upload);
+              //Set the progress value to show the progress bar
+              const uploadloadProgress = Math.round((100 * upload.loaded) / upload.total);
+              api.dispatch(setUploadProgress(uploadloadProgress));
+            },
+          });
+
+          return { data: result.data };
+        } catch (axiosError) {
+          const err = axiosError;
+          return {
+            error: {
+              status: err.response?.status,
+              data: err.response?.data || err.message,
+            },
+          };
+        }
+      },
       invalidatesTags: ['Files'],
     }),
     deleteCompletely: builder.mutation<undefined, string[]>({
@@ -216,4 +246,5 @@ export const {
   useUpdateFileMutation,
   useUploadFileMutation,
   useDeleteCompletelyMutation,
+  useUploadMutation,
 } = filesApi;
