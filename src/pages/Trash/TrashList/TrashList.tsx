@@ -19,9 +19,6 @@ const TrashList: React.FC = () => {
   const { setConfig } = useLayoutConfig();
   const { data: dataFiles } = useGetFilesQuery({ trashed: '' });
 
-  const [, setTick] = useState(0);
-  const forceUpdate = () => setTick(tick => tick + 1);
-
   const [emptyTrash, { isLoading: isLoadingDelete }] = useEmptyTrashMutation();
   const [checkedToUntrash, setCheckedToUntrash] = useState<string[]>([]);
   const [untrashFiles, { isLoading: isLoadingUntrash }] = useUntrashMutation();
@@ -55,7 +52,8 @@ const TrashList: React.FC = () => {
 
   const onEmptyTrash = useCallback(async () => {
     const result = await emptyTrash(undefined);
-    forceUpdate();
+    emptyTrash(undefined);
+
     return result;
   }, [emptyTrash]);
   return (

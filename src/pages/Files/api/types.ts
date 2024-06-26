@@ -11,15 +11,16 @@ export interface IPermission {
 }
 
 export interface IFile {
-  id: string;
-  name: string;
-  mimeType: string;
-  createdTime: Date;
-  modifiedTime: Date;
-  permissions: IPermission[];
-  trashed: boolean;
-  size: number;
-  parents: string[];
+  id?: string;
+  name?: string;
+  mimeType?: string;
+  createdTime?: Date;
+  modifiedTime?: Date;
+  permissions?: IPermission[];
+  trashed?: boolean;
+  size?: number;
+  myRole?: string;
+  parents?: string[];
 }
 
 export interface IFolder {

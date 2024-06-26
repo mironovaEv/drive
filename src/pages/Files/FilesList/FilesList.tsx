@@ -36,7 +36,7 @@ const { Content } = Layout;
 const FilesList: React.FC = () => {
   const navigate = useNavigate();
   const { setConfig } = useLayoutConfig();
-  const { data: dataFiles, isLoading: isLoading } = useGetFilesQuery({ trashed: '' });
+  const { data: dataFiles, isLoading: isLoadingFiles } = useGetFilesQuery({ trashed: '' });
   const [checkedToDelete, setCheckedToDelete] = useState<string[]>([]);
   const [uploadPost, { isLoading: isLoadingUpload }] = useUploadMutation();
 
@@ -171,17 +171,18 @@ const FilesList: React.FC = () => {
         <div className={b('files-container').toString()}>
           {dataFiles?.map(file => (
             <FileComponent
+              myRole={file.myRole}
               permissions={file.permissions}
               setCheckedToDelete={setCheckedToDelete}
               onSetDel={setDelete}
               onCancelDel={cancelDelete}
               id={file.id}
-              visible={file.parents[0] === folderId && !file.trashed}
+              visible={file.parents && file.parents[0] === folderId && !file.trashed}
               key={file.id}
               trashed={file.trashed}
               type={file.mimeType}
               name={file.name}
-              fileSize={file.size}
+              size={file.size}
             />
           ))}
         </div>

@@ -1,0 +1,29 @@
+@use '/src/shared/scss/color'; 
+
+.menu-button{
+    font-size: 18px;
+    margin: 0;
+    padding: 5px 0;
+    background: white;
+    cursor: pointer;
+    border-radius: 0;
+    border: 0;
+    box-shadow: 0 0 0;
+    color:  black;
+    
+}
+.noVis{
+    display: none;
+}
+
+.menu-button:hover{
+    color: color.$primary
+}
+
+.menu-button-text{
+    margin-left: 6px;
+}
+
+.menu-container{
+    display: block
+}

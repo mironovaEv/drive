@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Checkbox, Popover, Tooltip } from 'antd';
+import { Button, Card, Popover, Tooltip } from 'antd';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 
@@ -12,44 +12,23 @@ import { ImageIcon } from '../../../../shared/img/files/Image';
 import { AudioIcon } from '../../../../shared/img/files/Audio';
 import { VideoIcon } from '../../../../shared/img/files/Video';
 import { DefaultIcon } from '../../../../shared/img/files/Default';
-import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useFormatBytes';
+
 import { TextIcon } from '../../../../shared/img/files/Text';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '../../../../shared/img/files/Settings';
 import { DownloadIcon } from '../../../../shared/img/files/Download';
 import { useCallback, useState } from 'react';
 import FileMenu from '../FileMenu/fileMenu';
-import { IPermission } from '../../api/types';
-
-export type FileComponentProps = {
-  type?: string;
-  name?: string;
-  size?: number;
-  trashed?: boolean;
-  visible?: boolean;
-  permissions?: IPermission[];
-  id?: string;
-  myRole?: string;
-  onSetDel?: (id: string) => void;
-  onCancelDel?: (id: string) => void;
-  setCheckedToDelete?: (id: string[]) => void;
-};
+import { FileComponentProps } from '../../../Files/components/FileComponent/FileComponent';
+import { useFormatBytes } from '../../../../shared/hooks/useFormatBytes/useFormatBytes';
 
 const FileComponent = (file: FileComponentProps) => {
-  const [checked, setChecked] = useState<boolean>();
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
-  };
-
-  const onChange = () => {
-    setChecked(!checked);
-    if (!checked) {
-      file.onSetDel(file.id);
-    } else file.onCancelDel(file.id);
   };
 
   const handleDownload = (id: string) => {
@@ -63,22 +42,19 @@ const FileComponent = (file: FileComponentProps) => {
 
   const goFolder = useCallback(
     folder => {
-      file.setCheckedToDelete([]);
-      navigate(`/files/${folder}`);
+      navigate(`/available/${folder}`);
     },
-    [file, navigate]
+    [navigate]
   );
 
-  if (!file.trashed && file.visible && file.myRole == 'owner') {
+  if (!file.trashed && file.visible && file.myRole != 'owner') {
     const size = file.size ? useFormatBytes(file.size) : '';
 
     if (file.type.includes('folder')) {
       return (
         <Card onDoubleClick={() => goFolder(file.id)} className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={FolderIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <Popover
                 className="popover-menu"
@@ -89,7 +65,7 @@ const FileComponent = (file: FileComponentProps) => {
                 open={open}
                 onOpenChange={handleOpenChange}
               >
-                <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                <Button className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} icon={<SettingsIcon />} />
               </Popover>
             </div>
           </div>
@@ -102,9 +78,7 @@ const FileComponent = (file: FileComponentProps) => {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={ImageIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <div>
                 <Popover
@@ -116,7 +90,7 @@ const FileComponent = (file: FileComponentProps) => {
                   open={open}
                   onOpenChange={handleOpenChange}
                 >
-                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                  <Button icon={<SettingsIcon />} className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} />
                 </Popover>
               </div>
               <div>
@@ -133,9 +107,7 @@ const FileComponent = (file: FileComponentProps) => {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={AudioIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <div>
                 <Popover
@@ -147,7 +119,7 @@ const FileComponent = (file: FileComponentProps) => {
                   open={open}
                   onOpenChange={handleOpenChange}
                 >
-                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                  <Button icon={<SettingsIcon />} className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} />
                 </Popover>
               </div>
               <div>
@@ -164,9 +136,7 @@ const FileComponent = (file: FileComponentProps) => {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={TextIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <div>
                 <Popover
@@ -178,7 +148,7 @@ const FileComponent = (file: FileComponentProps) => {
                   open={open}
                   onOpenChange={handleOpenChange}
                 >
-                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                  <Button icon={<SettingsIcon />} className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} />
                 </Popover>
               </div>
               <div>
@@ -195,9 +165,7 @@ const FileComponent = (file: FileComponentProps) => {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={VideoIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <div>
                 <Popover
@@ -209,7 +177,7 @@ const FileComponent = (file: FileComponentProps) => {
                   open={open}
                   onOpenChange={handleOpenChange}
                 >
-                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                  <Button icon={<SettingsIcon />} className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} />
                 </Popover>
               </div>
               <div>
@@ -226,9 +194,7 @@ const FileComponent = (file: FileComponentProps) => {
       return (
         <Card className={'file-card'} hoverable cover={<Icon className={'file-card-icon'} component={DefaultIcon} />}>
           <div className={'file-card-settings'}>
-            <div>
-              <Checkbox className="file-card-settings-checkbox" onChange={onChange}></Checkbox>
-            </div>
+            <div></div>
             <div>
               <div>
                 <Popover
@@ -240,7 +206,7 @@ const FileComponent = (file: FileComponentProps) => {
                   open={open}
                   onOpenChange={handleOpenChange}
                 >
-                  <Button icon={<SettingsIcon />} className="file-card-settings-button" />
+                  <Button icon={<SettingsIcon />} className={` file-card-settings-button ${file.myRole == 'reader' ? 'noVis' : ''}`} />
                 </Popover>
               </div>
               <div>
