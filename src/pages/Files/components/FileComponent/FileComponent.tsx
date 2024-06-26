@@ -55,7 +55,7 @@ const FileComponent = (file: FileComponentProps) => {
   const handleDownload = (id: string) => {
     const url = 'http://localhost:8080/api/drive/files/download/' + id;
     axios({ url: url, method: 'GET', responseType: 'blob' }).then(res => {
-      let nameHeader = JSON.parse(JSON.stringify(res.headers))['content-disposition'];
+      let nameHeader = decodeURI(res.headers['content-disposition']).replace(/\+/g, ' ');
       nameHeader = nameHeader.split('=').pop();
       fileDownload(res.data, nameHeader);
     });
