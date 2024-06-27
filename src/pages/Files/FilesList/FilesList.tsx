@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { Button, Layout, Space, Typography, Upload, UploadProps, message } from 'antd';
+import { Button, Layout, Space, Spin, Typography, Upload, UploadProps, message } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
 import { ReactReduxContext } from 'react-redux';
 import { Paths } from '../../../shared/constants';
@@ -89,10 +89,9 @@ const FilesList: React.FC = () => {
   const handleUploadFiles = ({ file }) => {
     try {
       const response = uploadPost({
-        //endpoint
-        method: 'post', // post, put, patch, delete
-        data: { targetFolderId: folderId, file: file }, //your data to send to your backend
-        setUploadProgress: setUploadProgress, //a function update upload progress
+        method: 'post',
+        data: { targetFolderId: folderId, file: file },
+        setUploadProgress: setUploadProgress,
       });
     } catch (err) {
       console.log(err);
@@ -168,24 +167,26 @@ const FilesList: React.FC = () => {
         </div>
       </MainHeader>
       <Content>
-        <div className={b('files-container').toString()}>
-          {dataFiles?.map(file => (
-            <FileComponent
-              myRole={file.myRole}
-              permissions={file.permissions}
-              setCheckedToDelete={setCheckedToDelete}
-              onSetDel={setDelete}
-              onCancelDel={cancelDelete}
-              id={file.id}
-              visible={file.parents && file.parents[0] === folderId && !file.trashed}
-              key={file.id}
-              trashed={file.trashed}
-              type={file.mimeType}
-              name={file.name}
-              size={file.size}
-            />
-          ))}
-        </div>
+        <Spin spinning={isLoadingFiles}>
+          <div className={b('files-container').toString()}>
+            {dataFiles?.map(file => (
+              <FileComponent
+                myRole={file.myRole}
+                permissions={file.permissions}
+                setCheckedToDelete={setCheckedToDelete}
+                onSetDel={setDelete}
+                onCancelDel={cancelDelete}
+                id={file.id}
+                visible={file.parents && file.parents[0] === folderId && !file.trashed}
+                key={file.id}
+                trashed={file.trashed}
+                type={file.mimeType}
+                name={file.name}
+                size={file.size}
+              />
+            ))}
+          </div>
+        </Spin>
       </Content>
       <CreateRecordModal
         formMode={formCreateRecordMode}

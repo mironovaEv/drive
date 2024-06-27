@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useEffect } from 'react';
-import { Button, Layout } from 'antd';
+import { Button, Layout, Spin } from 'antd';
 import { useLayoutConfig } from '../../../shared/hooks/useLayoutConfig/useLayoutConfig';
 import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
@@ -53,21 +53,23 @@ const AvailableList: React.FC = () => {
         </div>
       </MainHeader>
       <Content>
-        <div className={b('files-container').toString()}>
-          {dataFiles?.map(file => (
-            <FileComponent
-              myRole={file.myRole}
-              permissions={file.permissions}
-              id={file.id}
-              visible={file.parents && file.parents[0] === folderId && !file.trashed}
-              key={file.id}
-              trashed={file.trashed}
-              type={file.mimeType}
-              name={file.name}
-              size={file.size}
-            />
-          ))}
-        </div>
+        <Spin spinning={isLoadingFiles}>
+          <div className={b('files-container').toString()}>
+            {dataFiles?.map(file => (
+              <FileComponent
+                myRole={file.myRole}
+                permissions={file.permissions}
+                id={file.id}
+                visible={file.parents && file.parents[0] === folderId && !file.trashed}
+                key={file.id}
+                trashed={file.trashed}
+                type={file.mimeType}
+                name={file.name}
+                size={file.size}
+              />
+            ))}
+          </div>
+        </Spin>
       </Content>
     </div>
   );

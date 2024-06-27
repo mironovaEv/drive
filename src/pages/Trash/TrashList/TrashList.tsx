@@ -4,7 +4,7 @@ import { Paths } from '../../../shared/constants';
 import block from 'bem-cn';
 import MainHeader from '../../../features/MainHeader/MainHeader';
 import './TrashList.scss';
-import { Button, Layout } from 'antd';
+import { Button, Layout, Spin } from 'antd';
 import { FolderOutlined, UndoOutlined } from '@ant-design/icons';
 
 import FileComponent from '../components/FileComponent/FileComponent';
@@ -17,7 +17,7 @@ const { Content } = Layout;
 
 const TrashList: React.FC = () => {
   const { setConfig } = useLayoutConfig();
-  const { data: dataFiles } = useGetFilesQuery({ trashed: '' });
+  const { data: dataFiles, isLoading: isLoadingFiles } = useGetFilesQuery({ trashed: '' });
 
   const [emptyTrash, { isLoading: isLoadingDelete }] = useEmptyTrashMutation();
   const [checkedToUntrash, setCheckedToUntrash] = useState<string[]>([]);
@@ -81,22 +81,24 @@ const TrashList: React.FC = () => {
         </div>
       </MainHeader>
       <Content>
-        <div className={b('files-container').toString()}>
-          {dataFiles?.map(file => (
-            <FileComponent
-              setCheckedToUntrash={setCheckedToUntrash}
-              onSetUntrash={setUntrash}
-              onCancelUntrash={cancelUntrash}
-              id={file.id}
-              visible={file.trashed}
-              key={file.id}
-              trashed={file.trashed}
-              type={file.mimeType}
-              name={file.name}
-              fileSize={file.size}
-            />
-          ))}
-        </div>
+        <Spin spinning={isLoadingFiles}>
+          <div className={b('files-container').toString()}>
+            {dataFiles?.map(file => (
+              <FileComponent
+                setCheckedToUntrash={setCheckedToUntrash}
+                onSetUntrash={setUntrash}
+                onCancelUntrash={cancelUntrash}
+                id={file.id}
+                visible={file.trashed}
+                key={file.id}
+                trashed={file.trashed}
+                type={file.mimeType}
+                name={file.name}
+                fileSize={file.size}
+              />
+            ))}
+          </div>
+        </Spin>
       </Content>
       <DeleteModal
         isLoading={isLoadingDelete}
